@@ -1,6 +1,7 @@
 package policies;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import model.Pragma;
 
@@ -10,6 +11,7 @@ public abstract class Policy {
 	public static final int DEFAULT_MODE = 1;
 	
 	public ArrayList<Pragma> pragmas;
+	public Vector vectorPragma;
 	public int mode;
 
 
@@ -18,12 +20,22 @@ public abstract class Policy {
 		this.pragmas = pragmas;
 		this.mode = mode;
 	}
+	public Policy(Vector vectorPragma, int mode) {
+		this.vectorPragma = vectorPragma;
+		this.mode = mode;
+	}
+	
+	
 	public Policy(ArrayList<Pragma> pragmas) {
 		this(pragmas, DEFAULT_MODE);
 	}
+	public Policy(Vector vectorPragma) {
+		this(vectorPragma, DEFAULT_MODE);
+	}
+	
 	
 	public Policy() {
-		this(null, DEFAULT_MODE);
+		this((Vector) null, DEFAULT_MODE);
 	}
 	
 	
@@ -44,6 +56,18 @@ public abstract class Policy {
 	
 	
 	
+	/**
+	 * @return the vectorPragma
+	 */
+	public Vector getVectorPragma() {
+		return vectorPragma;
+	}
+	/**
+	 * @param vectorPragma the vectorPragma to set
+	 */
+	public void setVectorPragma(Vector vectorPragma) {
+		this.vectorPragma = vectorPragma;
+	}
 	public Pragma getThePragma(int id) {
 		return pragmas.get(id);
 	}
@@ -63,6 +87,7 @@ public abstract class Policy {
 	}
 
 	public abstract ArrayList<Pragma> sortPragmas(ArrayList<Pragma> array);
+	public abstract ArrayList<Vector> sortVectorPragma(ArrayList<Vector> vector);
 	public abstract String getPolicyName();
 
 }
