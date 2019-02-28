@@ -9,12 +9,16 @@ public class Pragma {
 	public int priority;
 	
 	
-	public Pragma(int start, int duration, int space, int priority){
+	public Pragma(int id, int start, int duration, int space, int priority){
 		this.start = start;
 		this.duration = duration;
 		this.space = space;
+		this.priority = priority;
 	}
    
+	public Pragma(int priority) {
+		this(0, 0, 0, 0, priority);
+	}
 
 	//Getters and setters
 	
