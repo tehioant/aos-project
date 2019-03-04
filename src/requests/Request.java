@@ -8,9 +8,10 @@ import java.io.Serializable;
 
 
 
-public abstract class Request implements Serializable{
+public abstract class Request implements Serializable, Comparable{
 	
 	
+	private static final long serialVersionUID = 1L;
 	public int requestType;
 	public String payload;
 	

@@ -1,6 +1,7 @@
 package policies;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
@@ -50,6 +51,6 @@ public abstract class Policy {
 	public abstract String getPolicyName();
 	
 	// momentary method
-	public abstract PriorityQueue<Request> getScheduled(PriorityQueue<Request> request);
+	public abstract LinkedList<Request> getScheduled(LinkedList<Request> queue);
 
 }

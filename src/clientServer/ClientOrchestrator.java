@@ -5,7 +5,7 @@ package clientServer;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 import java.util.Scanner; 
@@ -27,14 +27,14 @@ public class ClientOrchestrator {
             InetAddress ip = InetAddress.getByName("localhost"); 
       
             // establish the connection with server port 5056 
-            Socket s = new Socket(ip, 5056); 
+            Socket s = new Socket(ip, 5096); 
       
             // obtaining input and out streams 
             DataInputStream dis = new DataInputStream(s.getInputStream()); 
             DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
             
             
-      
+            Random random = new Random();
         	
             // the following loop performs the exchange of 
             // information between client and client handler 
@@ -43,17 +43,24 @@ public class ClientOrchestrator {
             	
             	// we create a request to modelise an app request
             	int requestType = 0;
-            	String payload = "payload of RR request";
-            	RR request = new RR(requestType,  payload);
-            	System.out.println("Sending a request ::  " + request.toString()); 
-            	
+            	RR request = null;
             	ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
-            	oos.writeObject(request);
+            	for(int i=0; i < 200;i++){
+	            	requestType = random.nextInt(100);
+	            	String payload = "payload of RR request " + i;
+	            	request = new RR(requestType,  payload);
+	            	System.out.println("Sending a request ::  " + request.toString());
+	            	oos.writeObject(request);
+	            	//Thread.sleep(1000);
+            	}
+            	
+            	
             	
             	ObjectInputStream  ois = new ObjectInputStream(s.getInputStream()); 
-            	PriorityQueue<Request> answer = (PriorityQueue<Request>) ois.readObject();
+            	LinkedList<Request> answer = (LinkedList<Request>) ois.readObject();
             	System.out.println("----------------------");
             	System.out.println("The answer is ::  " + answer.toString()); 
+            	System.out.println(answer.size()); 
             	break;
             	/*
                 System.out.println(dis.readUTF()); 

@@ -1,6 +1,7 @@
 package policies;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
@@ -52,9 +53,11 @@ public class ApplicationPriority extends Policy{
 		return "Application Priority";
 	}
 
+
 	@Override
-	public PriorityQueue<Request> getScheduled(PriorityQueue<Request> array) {
-		return array;
+	public LinkedList<Request> getScheduled(LinkedList<Request> queue) {
+		// TODO Auto-generated method stub
+		return queue;
 	}
 
 	

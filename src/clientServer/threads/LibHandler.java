@@ -19,49 +19,48 @@ public class LibHandler extends Thread {
 	ObjectInputStream ois; 
 	ObjectOutputStream oos;  
 	final Socket s; 
-	PriorityQueue<Request> queue;
+	LinkedList<Request> queue;
+	LinkedList<Request> queueToFactory;
 
 	// Constructor 
-	public LibHandler(Socket s, ObjectInputStream ois, ObjectOutputStream oos) { 
+	public LibHandler(Socket s, ObjectInputStream ois, ObjectOutputStream oos, LinkedList<Request> queue) { 
 		this.s = s; 
 		this.ois = ois; 
-		this.oos = oos; 
+		this.oos = oos;
+		this.queue = queue;
 	} 
 
 	@Override
 	public void run() { 
  
 		System.out.println("LibHandler in action : waiting for message ..."); 
-		queue = new PriorityQueue<Request>(); 
+		queueToFactory = new LinkedList<Request>();
 		while (true) { 
 			try { 
-				
-				Request request = (Request) ois.readObject();
-				queue.add(request);
+				Calendar cal = Calendar.getInstance();
+		        long startTime = cal.getTimeInMillis();
+		        long currentTime = startTime;
+		        
+		        while(queueToFactory.size() < 100 && currentTime < startTime + 1000 ){
+		        	this.queueToFactory.add(this.queue.poll());
+		        	currentTime = cal.getTimeInMillis();
+		        }
+		        
 				System.out.println("All requests received"); 
 				System.out.println("Processing ..."); 
 				
-				PriorityQueue<Request> response = Factory.getResponse(queue);
-				System.out.println("End process : Sending ... "); 
+				LinkedList<Request> response = Factory.getResponse(queueToFactory);
+				System.out.println("End process : Sending ... ");
+				System.out.println("Message sent :/  " + response.toString());
             	oos.writeObject(response);
             	System.out.println("Response scheduler sent... "); 
 				
-				break;
-			} catch (IOException e) { 
+            	break;
+            	
+			} catch (IOException  | NullPointerException e) { 
 				e.printStackTrace(); 
-			} catch (ClassNotFoundException e) {
-	        	   System.out.println(e);
-	               e.printStackTrace();
-	        }
-		} 
-		
-		try { 
-			// closing resources 
-			this.ois.close(); 
-			this.oos.close();
-			
-		}catch(IOException e){ 
-			e.printStackTrace(); 
+				continue;
+			} 
 		} 
 	} 
 	
