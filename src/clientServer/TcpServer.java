@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import clientServer.threads.LibHandler;
-import model.Pragma;
+import clientServer.threads.*;
+import factory.Factory;
 import policies.ApplicationPriority;
 import policies.Policy;
 
@@ -15,12 +15,14 @@ import java.io.*;
 
 
 
-public class Orchestrator {
-	
-	
+public class TcpServer {
+
+    
 	public static void main(String[] args) throws IOException { 
 		// server is listening on port 5056 
 		ServerSocket ss = new ServerSocket(5056); 
+		System.out.println("Server setup :"); 
+		System.out.println("Waiting to accept user...");
 		
 		// running infinite loop for getting 
 		// client request 
@@ -29,29 +31,33 @@ public class Orchestrator {
 			Socket s = null; 
 			
 			try	{ 
+				
 				// socket object to receive incoming client requests 
 				s = ss.accept(); 
-				System.out.println("A new client is connected : " + s); 
-				
-				// obtaining input and out streams 
-				DataInputStream dis = new DataInputStream(s.getInputStream()); 
-				DataOutputStream dos = new DataOutputStream(s.getOutputStream()); 
-				
-				
 
 				// create a new thread object 
-				Thread t = new LibHandler(s, dis, dos, id); 
+				Thread connThread = new ConnectionThread(s,id); 
 				System.out.println("Assigning new thread for this client"); 
-
 				// Invoking the start() method 
-				t.start(); 
+				connThread.start(); 
 				id++;
+				
+
+				// obtaining input and out streams 
+				ObjectInputStream ois = new ObjectInputStream(s.getInputStream()); 
+				ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream()); 
+				
+				Thread libHandler = new LibHandler(s, ois, oos);
+				libHandler.start();
+				
+				
 			} 
 			catch (Exception e){ 
 				s.close(); 
 				e.printStackTrace(); 
 			} 
-		} 
+		}
+		
 	} 
 } 
 

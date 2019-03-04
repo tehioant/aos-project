@@ -3,87 +3,70 @@ package clientServer.threads;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
+
+import requests.RR;
+import requests.Request;
+import factory.*;
 
 public class LibHandler extends Thread {
 	
 	
 	
-	DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd"); 
-	DateFormat fortime = new SimpleDateFormat("hh:mm:ss"); 
-	final DataInputStream dis; 
-	final DataOutputStream dos; 
+	ObjectInputStream ois; 
+	ObjectOutputStream oos;  
 	final Socket s; 
-	int id;
+	PriorityQueue<Request> queue;
 
 	// Constructor 
-	public LibHandler(Socket s, DataInputStream dis, DataOutputStream dos, int id) { 
+	public LibHandler(Socket s, ObjectInputStream ois, ObjectOutputStream oos) { 
 		this.s = s; 
-		this.dis = dis; 
-		this.dos = dos; 
-		this.id = id;
+		this.ois = ois; 
+		this.oos = oos; 
 	} 
 
 	@Override
 	public void run() { 
-		String received; 
-		String toreturn; 
+ 
+		System.out.println("LibHandler in action : waiting for message ..."); 
+		queue = new PriorityQueue<Request>(); 
 		while (true) { 
 			try { 
-
-				// Ask user what he wants 
-				dos.writeUTF("What do you want?[Date | Time]..\n"+ 
-							"Type Exit to terminate connection."); 
 				
-				// receive the answer from client 
-				received = dis.readUTF(); 
+				Request request = (Request) ois.readObject();
+				queue.add(request);
+				System.out.println("All requests received"); 
+				System.out.println("Processing ..."); 
 				
-				if(received.equals("Exit"))  { 
-					System.out.println("Client " + this.s + " sends exit..."); 
-					System.out.println("Closing this connection."); 
-					this.s.close(); 
-					System.out.println("Connection closed"); 
-					break; 
-				} 
+				PriorityQueue<Request> response = Factory.getResponse(queue);
+				System.out.println("End process : Sending ... "); 
+            	oos.writeObject(response);
+            	System.out.println("Response scheduler sent... "); 
 				
-				// creating Date object 
-				Date date = new Date(); 
-				
-				// write on output stream based on the 
-				// answer from the client 
-				switch (received) { 
-				
-					case "Date" : 
-						toreturn = fordate.format(date); 
-						dos.writeUTF(toreturn); 
-						break; 
-						
-					case "Time" : 
-						toreturn = fortime.format(date); 
-						dos.writeUTF(toreturn); 
-						break; 
-						
-					default: 
-						dos.writeUTF("Invalid input"); 
-						break; 
-				} 
+				break;
 			} catch (IOException e) { 
 				e.printStackTrace(); 
-			} 
+			} catch (ClassNotFoundException e) {
+	        	   System.out.println(e);
+	               e.printStackTrace();
+	        }
 		} 
 		
 		try { 
 			// closing resources 
-			this.dis.close(); 
-			this.dos.close(); 
+			this.ois.close(); 
+			this.oos.close();
 			
 		}catch(IOException e){ 
 			e.printStackTrace(); 
 		} 
 	} 
+	
+
+	
 } 
 
 

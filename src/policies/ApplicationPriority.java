@@ -1,23 +1,19 @@
 package policies;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Vector;
 
-import model.Pragma;
+import requests.Request;
 
 public class ApplicationPriority extends Policy{
 
-	
-	public ApplicationPriority(ArrayList<Pragma> pragmas) {
-		super(pragmas);
-		// TODO Auto-generated constructor stub
-	}
-	
-	public ApplicationPriority(Vector pragmas) {
-		super(pragmas);
-		// TODO Auto-generated constructor stub
-	}
 
+	public ApplicationPriority(ArrayList<Request> request) {
+		super(request);
+		// TODO Auto-generated constructor stub
+	}
+	
 	public ApplicationPriority() {
 		super();
 	}
@@ -29,23 +25,6 @@ public class ApplicationPriority extends Policy{
 	
 	// Methods
 	
-	
-	public ArrayList<Pragma> sortPragmas(ArrayList<Pragma> array){
-		ArrayList<Pragma> pragmaList = new ArrayList<Pragma>();
-		pragmaList.add(array.get(0));
-		for(int index=1;  index < array.size(); index++) {
-			for(int i=0;  i < pragmaList.size(); i++) {
-				if(array.get(index).getPriority() >  pragmaList.get(i).getPriority()) {
-					pragmaList.add(i, array.get(index));
-					break;
-				}
-			}
-			if(pragmaList.size() != index+1) {
-				pragmaList.add(array.get(index));
-			}
-		}
-		return pragmaList;
-	}
 	
 	
 	public ArrayList<Vector> sortVectorPragma(ArrayList<Vector> vector) {
@@ -71,6 +50,11 @@ public class ApplicationPriority extends Policy{
 	
 	public String getPolicyName(){
 		return "Application Priority";
+	}
+
+	@Override
+	public PriorityQueue<Request> getScheduled(PriorityQueue<Request> array) {
+		return array;
 	}
 
 	

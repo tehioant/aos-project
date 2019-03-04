@@ -1,14 +1,22 @@
 package requests;
 
-public abstract class Request {
+
+
+import java.io.Serializable;
+
+
+
+
+
+public abstract class Request implements Serializable{
 	
 	
-	public Enum requestType;
+	public int requestType;
 	public String payload;
 	
 	
 	
-	public Request(Enum requestType, String payload){
+	public Request(int requestType, String payload){
 		this.requestType = requestType;
 		this.payload = payload;
 	}
@@ -16,8 +24,18 @@ public abstract class Request {
 
 	
 	
+	public int getRequestType(){
+		return this.requestType;
+	}
 	
-	
-	
+	public String getPayload(){
+		return this.payload;
+	}
 
+	
+	
+	public String toString(){
+		return  this.getRequestType() + " / " + this.getPayload();
+	}
+	
 }
