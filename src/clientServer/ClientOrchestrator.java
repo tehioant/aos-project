@@ -26,7 +26,7 @@ public class ClientOrchestrator {
             // getting localhost ip 
             InetAddress ip = InetAddress.getByName("localhost"); 
       
-            // establish the connection with server port 5056 
+            // establish the connection with server port 5096
             Socket s = new Socket(ip, 5096); 
       
             // obtaining input and out streams 
@@ -46,18 +46,16 @@ public class ClientOrchestrator {
             	RR request = null;
             	ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
             	for(int i=0; i < 200;i++){
-	            	requestType = random.nextInt(100);
-	            	String payload = "payload of RR request " + i;
-	            	request = new RR(requestType,  payload);
+	            	requestType = random.nextInt(10);
+	            	int payload = i;
+	            	request = new RR(requestType,  payload, false);
 	            	System.out.println("Sending a request ::  " + request.toString());
 	            	oos.writeObject(request);
 	            	//Thread.sleep(1000);
             	}
             	
-            	
-            	
             	ObjectInputStream  ois = new ObjectInputStream(s.getInputStream()); 
-            	LinkedList<Request> answer = (LinkedList<Request>) ois.readObject();
+            	ArrayList<Request> answer = (ArrayList<Request>) ois.readObject();
             	System.out.println("----------------------");
             	System.out.println("The answer is ::  " + answer.toString()); 
             	System.out.println(answer.size()); 

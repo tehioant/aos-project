@@ -49,7 +49,7 @@ public class LibHandler extends Thread {
 				System.out.println("All requests received"); 
 				System.out.println("Processing ..."); 
 				
-				LinkedList<Request> response = Factory.getResponse(queueToFactory);
+				ArrayList<Request> response = Factory.getResponse(queueToFactory);
 				System.out.println("End process : Sending ... ");
 				System.out.println("Message sent :/  " + response.toString());
             	oos.writeObject(response);

@@ -10,7 +10,7 @@ import requests.Request;
 public class ApplicationPriority extends Policy{
 
 
-	public ApplicationPriority(ArrayList<Request> request) {
+	public ApplicationPriority(LinkedList<Request> request) {
 		super(request);
 		// TODO Auto-generated constructor stub
 	}
@@ -55,9 +55,25 @@ public class ApplicationPriority extends Policy{
 
 
 	@Override
-	public LinkedList<Request> getScheduled(LinkedList<Request> queue) {
-		// TODO Auto-generated method stub
-		return queue;
+	public ArrayList<Request> getScheduled(LinkedList<Request> queue) {
+		ArrayList<Request> schedule = new ArrayList<Request>();
+		schedule.add(queue.poll());
+		Request poll;
+		while(queue.size() > 0){
+			poll = queue.poll();
+			boolean gotIN = false;
+			for(int index=0;  index < schedule.size(); index++) {
+				if(poll.getRequestType() > schedule.get(index).getRequestType()){
+					schedule.add(index, poll);
+					gotIN = true;
+					break;
+				}
+			}
+			if(!gotIN){
+				schedule.add(poll);
+			}
+		}
+		return schedule;
 	}
 
 	

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import clientServer.threads.*;
 import factory.Factory;
@@ -28,6 +30,7 @@ public class TcpServer {
 	public Socket s;
 	public ObjectInputStream ois;
 	public ObjectOutputStream oos;
+	// private static int MAX_THREAD_POOL = 3;
     
 	public static void main(String[] args) throws IOException {
 		new TcpServer();
@@ -52,10 +55,11 @@ public class TcpServer {
 		while (true) { 
 			s = null; 
 			
-			try	{ 
+			try	{
 				
 				// socket object to receive incoming client requests 
-				s = ss.accept(); 
+				s = ss.accept();
+				
 				
 				// obtaining input and out streams 
 				ois = new ObjectInputStream(s.getInputStream()); 
@@ -70,11 +74,11 @@ public class TcpServer {
 				id++;
 				
 				Thread.sleep(100);
-				Thread libHandler = new LibHandler(s, ois, oos, queue);
+				Thread libHandler = new LibHandler(s, ois, oos, queue); 
 				libHandler.start();
 				
 			} 
-			catch (Exception e){ 
+			catch (Exception e){
 				e.printStackTrace(); 
 				break;
 			} 
@@ -86,10 +90,6 @@ public class TcpServer {
 	public void emptyQueue(){
 		this.queue.clear();;
 	}
-	
-	
-	
-	
 	
 	
 	

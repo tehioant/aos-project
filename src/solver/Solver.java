@@ -3,7 +3,9 @@ package solver;
 
 import policies.ApplicationPriority;
 import policies.Policy;
-import java.util.Queue;
+import requests.Request;
+
+import java.util.LinkedList;
 import javax.ejb.Singleton;
 
 
@@ -13,13 +15,13 @@ public class Solver{
 	private static Solver instance=null;
 	
 	
-	public Queue queue;
+	public LinkedList<Request> queue;
 	public Policy policy;
 	public double ressources;
 	
 	
 	
-	private Solver(Queue queue, Policy policy, double ressources){
+	private Solver(LinkedList<Request> queue, Policy policy, double ressources){
 		this.queue = queue;
 		this.policy = policy;
 		this.ressources = ressources;
@@ -43,11 +45,11 @@ public class Solver{
 	
 	
 	
-	public Queue getQueue(){
+	public LinkedList<Request> getQueue(){
 		return this.queue;
 	}
 	
-	public void setQueue(Queue q){
+	public void setQueue(LinkedList<Request> q){
 		this.queue = q;
 	}
 	
@@ -72,12 +74,6 @@ public class Solver{
 	public void setRessources(double r){
 		this.ressources = r;
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	

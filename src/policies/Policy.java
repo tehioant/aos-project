@@ -13,10 +13,11 @@ public abstract class Policy {
 	
 	public static final String DEFAULT_MODE = "ApplicationPriority";
 	
-	public ArrayList<Request> requests;
+	public LinkedList<Request> requests;
 
 
-	public Policy(ArrayList<Request> requests) {
+	
+	public Policy(LinkedList<Request> requests) {
 		this.requests = requests;
 	}
 	
@@ -27,19 +28,16 @@ public abstract class Policy {
 	
 	
 	
-	
-	
-	
 	/**
 	 * @return the requests
 	 */
-	public ArrayList<Request> getRequests() {
+	public LinkedList<Request> getRequests() {
 		return requests;
 	}
 	/**
 	 * @param requests the requests to set
 	 */
-	public void setRequests(ArrayList<Request> requests) {
+	public void setRequests(LinkedList<Request> requests) {
 		this.requests = requests;
 	}
 	
@@ -47,10 +45,9 @@ public abstract class Policy {
 	
 	
 	
-	public abstract ArrayList<Vector> sortVectorPragma(ArrayList<Vector> vector);
 	public abstract String getPolicyName();
 	
 	// momentary method
-	public abstract LinkedList<Request> getScheduled(LinkedList<Request> queue);
+	public abstract ArrayList<Request> getScheduled(LinkedList<Request> queue);
 
 }

@@ -5,8 +5,8 @@ public class ER extends Request{
 	
 	
 	
-	public ER(int requestType, String payload) {
-		super(requestType, payload);
+	public ER(int requestType, int payload, boolean scheduled) {
+		super(requestType, payload, scheduled);
 		// TODO Auto-generated constructor stub
 	}
 

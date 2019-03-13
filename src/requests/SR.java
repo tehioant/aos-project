@@ -2,8 +2,8 @@ package requests;
 
 public class SR extends Request{
 
-	public SR(int requestType, String payload) {
-		super(requestType, payload);
+	public SR(int requestType, int payload, boolean scheduled) {
+		super(requestType, payload, scheduled);
 		// TODO Auto-generated constructor stub
 	}
 
