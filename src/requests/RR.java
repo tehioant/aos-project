@@ -7,8 +7,8 @@ public class RR extends Request{
 	
 	
 	
-	public RR(int requestType, int payload, boolean scheduled) {
-		super(requestType, payload, scheduled);
+	public RR(int requestType, int payload, boolean scheduled, long time) {
+		super(requestType, payload, scheduled, time);
 	}
 
 	@Override

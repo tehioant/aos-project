@@ -47,6 +47,8 @@ public class TcpServer {
 			e1.printStackTrace();
 		} 
 		
+		// Initializing pool
+		ExecutorService pool = Executors.newFixedThreadPool(3);
 		
 		// running infinite loop for getting 
 		// client request 
@@ -73,9 +75,11 @@ public class TcpServer {
 				connThread.start(); 
 				id++;
 				
+				
+				
 				Thread.sleep(100);
-				Thread libHandler = new LibHandler(s, ois, oos, queue); 
-				libHandler.start();
+				pool.execute(new LibHandler(s, ois, oos, queue)); 
+
 				
 			} 
 			catch (Exception e){

@@ -21,27 +21,53 @@ public class Factory {
 	private static final double TIMER = 10;
 	
 	public static Solver solver = Solver.getInstance();
+	
 	public static Policy policy;
 	public static ArrayList<Request> schedule;
 	public static DispatcherInterface disp = new DispatcherInterface();
+	public static String POLICY_TYPE = "ApplicationPriority";
+	
 	
 	
 	public static ArrayList<Request> getResponse(LinkedList<Request> queue){
 		
 		System.out.println("Request : "+ queue); 
-		solver.setPolicy("ApplicationPriority");
+		
+		// Prepare Policy
+		solver.setPolicy(POLICY_TYPE);
 		policy = solver.getPolicy();
 		System.out.println("Policy : " + policy.getPolicyName()); 
+		
+		// Schedule requests
 		schedule = policy.getScheduled(queue);
-		for(Request item : schedule){
-			while(true){
-				if(disp.getRessourcesDispatcher(item.payload))
-					break;
-				else
-					continue;
-			}
-		}
+		
+		// Send schedule to dispatcher
+		allocateRessources(schedule);
+
 		return schedule;
+	}
+	
+	
+	
+	
+	public static void allocateRessources(ArrayList<Request> schedule){
+		for(Request item : schedule){
+			disp.processRequest(item);
+		}
+	}
+	
+	
+	
+	
+	public void buildResponse(){
+		
+	}
+	
+	
+	
+	
+	public void updateQueue(){
+		
 	}
 	
 	

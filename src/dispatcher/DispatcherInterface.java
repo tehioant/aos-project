@@ -1,19 +1,18 @@
 package dispatcher;
 
+import requests.Request;
+
 public class DispatcherInterface {
 	
 	
 	public int capacity;
-	public int ressources;
-	public DummyDispatcher dispatcher = new DummyDispatcher();
+	public Request request;
+	public DummyDispatcher dispatcher = DummyDispatcher.getInstance();
+	public static int MAX_RESSOURCES_DISPATCHER = 10000000; // IN MBits 
 	
-	
-	public DispatcherInterface(int ressources){
-		this.ressources = ressources;
-	}
 	
 	public DispatcherInterface(){
-		this(0);
+		dispatcher.setMaxRessources(MAX_RESSOURCES_DISPATCHER);
 	}
 	
 	
@@ -32,24 +31,34 @@ public class DispatcherInterface {
 	}
 	
 	
-	
-	
-	public void setAllocatedRessource(int ressources){
-		this.ressources = ressources;
+	public void processRequest(Request request){
+		try {
+			this.assignRessources(request.getPayload());
+			Thread.sleep(request.getTime());
+			this.releaseRessources(request.getPayload());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
 	
-	
-	public int getAllocatedRessource(){
-		return this.ressources;
+	public void assignRessources(int ressources) throws InterruptedException{
+		while(true){
+			if(dispatcher.checkRessources(ressources)){
+				dispatcher.assignRessources(ressources);
+				break;
+			} else {
+				Thread.sleep(1000);
+			}
+		}
 	}
 	
 	
-	
-	public boolean getRessourcesDispatcher(int ressources){
-		return dispatcher.authorization(ressources);
+	public void releaseRessources(int ressources){
+		dispatcher.releaseRessources(ressources);
 	}
+	
 	
 	
 

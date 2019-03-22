@@ -21,7 +21,6 @@ public class ClientOrchestrator {
 	    
 	public static void main(String[] args) throws IOException { 
         try { 
-            Scanner scn = new Scanner(System.in); 
               
             // getting localhost ip 
             InetAddress ip = InetAddress.getByName("localhost"); 
@@ -43,12 +42,13 @@ public class ClientOrchestrator {
             	
             	// we create a request to modelise an app request
             	int requestType = 0;
+            	int payload = 0;
             	RR request = null;
             	ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
             	for(int i=0; i < 200;i++){
-	            	requestType = random.nextInt(10);
-	            	int payload = i;
-	            	request = new RR(requestType,  payload, false);
+            		payload = random.nextInt(10);
+	            	requestType = i;
+	            	request = new RR(requestType,  payload, false, payload*10);
 	            	System.out.println("Sending a request ::  " + request.toString());
 	            	oos.writeObject(request);
 	            	//Thread.sleep(1000);
@@ -80,7 +80,6 @@ public class ClientOrchestrator {
             } 
               
             // closing resources 
-            scn.close(); 
             dis.close(); 
             dos.close(); 
         }catch(Exception e){ 

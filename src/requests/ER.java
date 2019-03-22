@@ -5,14 +5,12 @@ public class ER extends Request{
 	
 	
 	
-	public ER(int requestType, int payload, boolean scheduled) {
-		super(requestType, payload, scheduled);
-		// TODO Auto-generated constructor stub
+	public ER(int requestType, int payload, boolean scheduled, long time) {
+		super(requestType, payload, scheduled, time);
 	}
 
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

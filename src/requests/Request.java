@@ -15,12 +15,14 @@ public abstract class Request implements Serializable, Comparable{
 	public int requestType;
 	public int payload;
 	public boolean scheduled;
+	public long time;
 	
 	
-	public Request(int requestType, int payload, boolean scheduled){
+	public Request(int requestType, int payload, boolean scheduled, long time){
 		this.requestType = requestType;
 		this.payload = payload;
 		this.scheduled = scheduled;
+		this.time = time;
 	}
 
 
@@ -50,6 +52,26 @@ public abstract class Request implements Serializable, Comparable{
 	
 	public boolean getScheduled(){
 		return this.scheduled;
+	}
+
+
+
+
+	/**
+	 * @return the time
+	 */
+	public long getTime() {
+		return time;
+	}
+
+
+
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(long time) {
+		this.time = time;
 	}
 	
 	
