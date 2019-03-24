@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import clientServer.threads.*;
-import factory.Factory;
+import factory.Scheduler;
 import policies.ApplicationPriority;
 import policies.Policy;
 import requests.Request;
@@ -20,7 +20,7 @@ import java.io.*;
 
 
 
-public class TcpServer {
+public class Orchestrator {
 	
 	//public String ipAdress = "127.0.0.1";
 	public int port = 5096;
@@ -33,11 +33,11 @@ public class TcpServer {
 	// private static int MAX_THREAD_POOL = 3;
     
 	public static void main(String[] args) throws IOException {
-		new TcpServer();
+		new Orchestrator();
 	}
 	
 	
-	public TcpServer(){
+	public Orchestrator(){
 		// server is listening on port 5056 
 		try {
 			ss = new ServerSocket(port);

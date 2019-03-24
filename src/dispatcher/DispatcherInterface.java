@@ -5,53 +5,44 @@ import requests.Request;
 public class DispatcherInterface {
 	
 	
-	public int capacity;
 	public Request request;
 	public DummyDispatcher dispatcher = DummyDispatcher.getInstance();
 	public static int MAX_RESSOURCES_DISPATCHER = 10000000; // IN MBits 
-	
+	public static int NB_BUFFERS = 100;
 	
 	public DispatcherInterface(){
 		dispatcher.setMaxRessources(MAX_RESSOURCES_DISPATCHER);
+		dispatcher.setBuffers(NB_BUFFERS);
 	}
 	
 	
 	
+	public int getCurrentCapacity(){
+		return dispatcher.getCurrentRessources();
+	}
 	
+	public int getMaxRessources(){
+		return this.MAX_RESSOURCES_DISPATCHER;
+	}
 	
-	public void setCapacity(int capacity){
-		this.capacity = capacity;
+	public int getBuffers(){
+		return this.NB_BUFFERS;
 	}
 	
 	
-	
-	
-	public int getCapacity(){
-		return this.capacity;
-	}
-	
-	
-	public void processRequest(Request request){
-		try {
+	public boolean processRequest(Request request){
+		if(dispatcher.checkRessources(request.payload)){
 			this.assignRessources(request.getPayload());
-			Thread.sleep(request.getTime());
-			this.releaseRessources(request.getPayload());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
 	
 	
-	public void assignRessources(int ressources) throws InterruptedException{
-		while(true){
-			if(dispatcher.checkRessources(ressources)){
-				dispatcher.assignRessources(ressources);
-				break;
-			} else {
-				Thread.sleep(1000);
-			}
-		}
+	public void assignRessources(int ressources) {
+		dispatcher.assignRessources(ressources);
 	}
 	
 	

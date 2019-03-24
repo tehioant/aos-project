@@ -63,7 +63,7 @@ public class ApplicationPriority extends Policy{
 			poll = queue.poll();
 			boolean gotIN = false;
 			for(int index=0;  index < schedule.size(); index++) {
-				if(poll.getRequestType() > schedule.get(index).getRequestType()){
+				if(poll.getPriority() > schedule.get(index).getPriority()){
 					schedule.add(index, poll);
 					gotIN = true;
 					break;

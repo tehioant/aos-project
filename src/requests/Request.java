@@ -12,24 +12,27 @@ public abstract class Request implements Serializable, Comparable{
 	
 	
 	private static final long serialVersionUID = 1L;
-	public int requestType;
+	public int priority;
 	public int payload;
 	public boolean scheduled;
-	public long time;
+	public long completionTime;
+	public long stallTime;
 	
 	
-	public Request(int requestType, int payload, boolean scheduled, long time){
-		this.requestType = requestType;
+	
+	
+	public Request(int priority, int payload, boolean scheduled, long completionTime){
+		this.priority = priority;
 		this.payload = payload;
 		this.scheduled = scheduled;
-		this.time = time;
+		this.completionTime = completionTime;
 	}
 
 
 	
 	
-	public int getRequestType(){
-		return this.requestType;
+	public int getPriority(){
+		return this.priority;
 	}
 	
 	
@@ -41,7 +44,7 @@ public abstract class Request implements Serializable, Comparable{
 	
 	
 	public String toString(){
-		return  this.getRequestType() + " / " + this.getPayload();
+		return  this.getPriority() + " / " + this.getPayload() + " / " + this.getCompletionTime() + " / " + this.getScheduled();
 	}
 	
 	
@@ -55,23 +58,39 @@ public abstract class Request implements Serializable, Comparable{
 	}
 
 
+	/**
+	 * @return the completionTime
+	 */
+	public long getCompletionTime() {
+		return completionTime;
+	}
 
 
 	/**
-	 * @return the time
+	 * @param completionTime the completionTime to set
 	 */
-	public long getTime() {
-		return time;
+	public void setCompletionTime(long completionTime) {
+		this.completionTime = completionTime;
 	}
 
 
 
 
 	/**
-	 * @param time the time to set
+	 * @return the stallTime
 	 */
-	public void setTime(long time) {
-		this.time = time;
+	public long getStallTime() {
+		return stallTime;
+	}
+
+
+
+
+	/**
+	 * @param stallTime the stallTime to set
+	 */
+	public void setStallTime(long stallTime) {
+		this.stallTime = stallTime;
 	}
 	
 	

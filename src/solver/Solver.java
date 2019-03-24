@@ -1,7 +1,11 @@
 package solver;
 
 
+import policies.ApplicationFairness;
 import policies.ApplicationPriority;
+import policies.MaxApplicationBandwidth;
+import policies.MaxBufferEfficiency;
+import policies.MinStallTime;
 import policies.Policy;
 import requests.Request;
 
@@ -17,19 +21,17 @@ public class Solver{
 	
 	public LinkedList<Request> queue;
 	public Policy policy;
-	public double ressources;
 	
 	
 	
-	private Solver(LinkedList<Request> queue, Policy policy, double ressources){
+	private Solver(LinkedList<Request> queue, Policy policy){
 		this.queue = queue;
 		this.policy = policy;
-		this.ressources = ressources;
 	}
 	
 	
 	private Solver(){
-		this(null, null, 0);
+		this(null, null);
 	}
 	
 	
@@ -61,18 +63,22 @@ public class Solver{
 	public void setPolicy(String policy){
 		switch (policy) {
 			case "ApplicationPriority":
-					this.policy = new ApplicationPriority();
-					break;
+				this.policy = new ApplicationPriority();
+				break;
+			case "ApplicationFairness":
+				this.policy = new ApplicationFairness();
+				break;
+			case "MaxApplicationBandwidth":
+				this.policy = new MaxApplicationBandwidth();
+				break;
+			case "MaxBufferEfficiency":
+				this.policy = new MaxBufferEfficiency();
+				break;
+			case "MinStallTime":
+				this.policy = new MinStallTime();
+				break;
 		}
 			
-	}
-	
-	public double getRessources(){
-		return (Double) null;
-	}
-	
-	public void setRessources(double r){
-		this.ressources = r;
 	}
 	
 	

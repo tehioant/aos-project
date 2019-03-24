@@ -13,16 +13,18 @@ public class DummyDispatcher {
 	private static DummyDispatcher instance=null;
 	public int maxRessources;
 	public int currentRessources;
+	public int buffers;
 	
 	
-	private DummyDispatcher(int maxRessources){
+	private DummyDispatcher(int maxRessources, int buffers){
 		this.maxRessources = maxRessources;
 		this.currentRessources = maxRessources;
+		this.buffers = buffers;
 	}
 	
 	
 	private DummyDispatcher(){
-		this(0);
+		this(0, 0);
 	}
 	
 	
@@ -73,6 +75,22 @@ public class DummyDispatcher {
 	}
 	
 	
+	/**
+	 * @return the buffers
+	 */
+	public int getBuffers() {
+		return buffers;
+	}
+
+
+	/**
+	 * @param buffers the buffers to set
+	 */
+	public void setBuffers(int buffers) {
+		this.buffers = buffers;
+	}
+
+
 	public boolean checkRessources(int ressources){
 		if(this.getCurrentRessources() > ressources){
 			

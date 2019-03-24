@@ -1,6 +1,7 @@
 package factory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -10,7 +11,7 @@ import policies.Policy;
 import requests.Request;
 import solver.Solver;
 
-public class Factory {
+public class Scheduler {
 
 	
 	
@@ -24,7 +25,7 @@ public class Factory {
 	
 	public static Policy policy;
 	public static ArrayList<Request> schedule;
-	public static DispatcherInterface disp = new DispatcherInterface();
+	public static DispatcherInterface dispInterface = new DispatcherInterface();
 	public static String POLICY_TYPE = "ApplicationPriority";
 	
 	
@@ -42,7 +43,13 @@ public class Factory {
 		schedule = policy.getScheduled(queue);
 		
 		// Send schedule to dispatcher
-		allocateRessources(schedule);
+		try {
+			allocateRessources(schedule);
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 
 		return schedule;
 	}
@@ -50,9 +57,15 @@ public class Factory {
 	
 	
 	
-	public static void allocateRessources(ArrayList<Request> schedule){
+	public static void allocateRessources(ArrayList<Request> schedule) throws InterruptedException{
+		boolean done = false;
 		for(Request item : schedule){
-			disp.processRequest(item);
+			done = dispInterface.processRequest(item);
+			if(!done){
+				Thread.sleep(100);
+				allocateRessources(new ArrayList<Request>(Arrays.asList(item)));
+			}
+			done = false;
 		}
 	}
 	
