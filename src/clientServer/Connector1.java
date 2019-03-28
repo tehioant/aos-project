@@ -1,6 +1,7 @@
 package clientServer;
 
 import java.net.*;
+import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
@@ -10,17 +11,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import clientServer.threads.*;
-import factory.Scheduler;
 import policies.ApplicationPriority;
 import policies.Policy;
 import requests.Request;
+import solver.Scheduler;
 
 import java.io.*;  
 
 
 
 
-public class Orchestrator {
+public class Connector1 {
 	
 	//public String ipAdress = "127.0.0.1";
 	public int port = 5096;
@@ -33,13 +34,16 @@ public class Orchestrator {
 	// private static int MAX_THREAD_POOL = 3;
     
 	public static void main(String[] args) throws IOException {
-		new Orchestrator();
+		new Connector1();
 	}
 	
 	
-	public Orchestrator(){
+	public Connector1(){
 		// server is listening on port 5056 
 		try {
+			ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+
+			serverSocketChannel.socket().bind(new InetSocketAddress(port));
 			ss = new ServerSocket(port);
 			System.out.println("Server setup :"); 
 			System.out.println("Waiting to accept user...");
@@ -78,7 +82,7 @@ public class Orchestrator {
 				
 				
 				Thread.sleep(100);
-				pool.execute(new LibHandler(s, ois, oos, queue)); 
+				pool.execute(new RequestHandler(s, ois, oos, queue)); 
 
 				
 			} 

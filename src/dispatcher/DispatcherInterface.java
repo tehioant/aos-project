@@ -1,56 +1,59 @@
 package dispatcher;
 
+import java.util.ArrayList;
+
+import dispatcher.model.Buffer;
 import requests.Request;
 
 public class DispatcherInterface {
 	
 	
 	public Request request;
-	public DummyDispatcher dispatcher = DummyDispatcher.getInstance();
-	public static int MAX_RESSOURCES_DISPATCHER = 10000000; // IN MBits 
-	public static int NB_BUFFERS = 100;
+	public DummyDispatcher dispatcher; 
+	public static long MAX_RESSOURCES_BUFFER = 150000; // IN MBits 
+	public static int NB_BUFFERS = 10;
 	
 	public DispatcherInterface(){
-		dispatcher.setMaxRessources(MAX_RESSOURCES_DISPATCHER);
-		dispatcher.setBuffers(NB_BUFFERS);
+		dispatcher = this.getDispatcher();
 	}
 	
 	
 	
-	public int getCurrentCapacity(){
+	public long getCurrentCapacity(){
 		return dispatcher.getCurrentRessources();
 	}
 	
-	public int getMaxRessources(){
-		return this.MAX_RESSOURCES_DISPATCHER;
+	public long getMaxRessources(){
+		return this.MAX_RESSOURCES_BUFFER;
 	}
 	
-	public int getBuffers(){
+	public int getNbMaxBuffers(){
 		return this.NB_BUFFERS;
 	}
 	
 	
-	public boolean processRequest(Request request){
-		if(dispatcher.checkRessources(request.payload)){
-			this.assignRessources(request.getPayload());
+	public boolean processRequest(int bufferID, Request request){
+		if(dispatcher.assignRessources(bufferID, request))
 			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 	
 	
 	
-	public void assignRessources(int ressources) {
-		dispatcher.assignRessources(ressources);
+	public DummyDispatcher getDispatcher(){
+		return DummyDispatcher.getInstance(MAX_RESSOURCES_BUFFER, NB_BUFFERS);
 	}
 	
 	
-	public void releaseRessources(int ressources){
-		dispatcher.releaseRessources(ressources);
+	public ArrayList<Buffer> getBuffers() {
+		this.getDispatcher().updateBuffers();
+		return this.getDispatcher().getBuffers();
 	}
 	
 	
+	public boolean checkRessources(int bufferId, Request request){
+		return this.getDispatcher().checkRessources(bufferId, request);
+	}
 	
 
 }

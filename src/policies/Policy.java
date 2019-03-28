@@ -5,8 +5,9 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
-
+import dispatcher.DispatcherInterface;
 import requests.Request;
+import solver.ProcessSolver;
 
 public abstract class Policy {
 	
@@ -14,16 +15,17 @@ public abstract class Policy {
 	public static final String DEFAULT_MODE = "ApplicationPriority";
 	
 	public LinkedList<Request> requests;
-
-
+	public long currentRessources;
+	public int buffers;
+	public DispatcherInterface dispInterface;
 	
-	public Policy(LinkedList<Request> requests) {
+	public Policy(DispatcherInterface dispInterface, LinkedList<Request> requests) {
 		this.requests = requests;
 	}
 	
 	
 	public Policy() {
-		this(null);
+		this(null, null);
 	}
 	
 	
@@ -41,13 +43,67 @@ public abstract class Policy {
 		this.requests = requests;
 	}
 	
+
+	
+	
+	
+	/**
+	 * @return the currentRessources
+	 */
+	public long getCurrentRessources() {
+		return currentRessources;
+	}
+
+
+	/**
+	 * @param currentRessources the currentRessources to set
+	 */
+	public void setCurrentRessources(long currentRessources) {
+		this.currentRessources = currentRessources;
+	}
 	
 	
 	
 	
+
+
+	/**
+	 * @return the buffers
+	 */
+	public int getBuffers() {
+		return buffers;
+	}
+
+
+	/**
+	 * @param buffers the buffers to set
+	 */
+	public void setBuffers(int buffers) {
+		this.buffers = buffers;
+	}
+
+
 	public abstract String getPolicyName();
 	
 	// momentary method
-	public abstract ArrayList<Request> getScheduled(LinkedList<Request> queue);
+	public abstract ArrayList<ProcessSolver> getScheduled(LinkedList<Request> queue);
+	
+	public abstract long costFunction(ArrayList<ProcessSolver> scheduled);
+
+
+	/**
+	 * @return the dispInterface
+	 */
+	public DispatcherInterface getDispInterface() {
+		return dispInterface;
+	}
+
+
+	/**
+	 * @param dispInterface the dispInterface to set
+	 */
+	public void setDispInterface(DispatcherInterface dispInterface) {
+		this.dispInterface = dispInterface;
+	}
 
 }

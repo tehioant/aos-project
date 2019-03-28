@@ -3,15 +3,17 @@ package policies;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import dispatcher.DispatcherInterface;
 import requests.Request;
+import solver.ProcessSolver;
 
 public class MaxApplicationBandwidth extends Policy{
 
 	
 	
 	
-	public MaxApplicationBandwidth(LinkedList<Request> request){
-		super(request);
+	public MaxApplicationBandwidth(DispatcherInterface dispInterface, LinkedList<Request> queue){
+		super(dispInterface, queue);
 	}
 	
 	public MaxApplicationBandwidth() {
@@ -28,8 +30,11 @@ public class MaxApplicationBandwidth extends Policy{
 	}
 
 	@Override
-	public ArrayList<Request> getScheduled(LinkedList<Request> queue) {
-		// TODO Auto-generated method stub
+	public ArrayList<ProcessSolver> getScheduled(LinkedList<Request> queue) {
+
+
+		
+		
 		return null;
 	}
 

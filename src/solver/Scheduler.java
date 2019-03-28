@@ -1,4 +1,4 @@
-package factory;
+package solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +9,6 @@ import dispatcher.DispatcherInterface;
 import policies.ApplicationPriority;
 import policies.Policy;
 import requests.Request;
-import solver.Solver;
 
 public class Scheduler {
 
@@ -24,13 +23,13 @@ public class Scheduler {
 	public static Solver solver = Solver.getInstance();
 	
 	public static Policy policy;
-	public static ArrayList<Request> schedule;
+	public static ArrayList<ProcessSolver> schedule;
 	public static DispatcherInterface dispInterface = new DispatcherInterface();
 	public static String POLICY_TYPE = "ApplicationPriority";
 	
 	
 	
-	public static ArrayList<Request> getResponse(LinkedList<Request> queue){
+	public static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
 		
 		System.out.println("Request : "+ queue); 
 		
@@ -40,34 +39,16 @@ public class Scheduler {
 		System.out.println("Policy : " + policy.getPolicyName()); 
 		
 		// Schedule requests
-		schedule = policy.getScheduled(queue);
+		policy.setCurrentRessources(dispInterface.getCurrentCapacity());
+		schedule = policy.getScheduled(dispInterface, queue);
 		
-		// Send schedule to dispatcher
-		try {
-			allocateRessources(schedule);
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
+
 
 		return schedule;
 	}
 	
 	
-	
-	
-	public static void allocateRessources(ArrayList<Request> schedule) throws InterruptedException{
-		boolean done = false;
-		for(Request item : schedule){
-			done = dispInterface.processRequest(item);
-			if(!done){
-				Thread.sleep(100);
-				allocateRessources(new ArrayList<Request>(Arrays.asList(item)));
-			}
-			done = false;
-		}
-	}
+
 	
 	
 	

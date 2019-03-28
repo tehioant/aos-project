@@ -43,12 +43,13 @@ public class ClientOrchestrator {
             	// we create a request to modelise an app request
             	int requestType = 0;
             	int payload = 0;
+            	int appId;
             	RR request = null;
             	ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
             	for(int i=0; i < 200;i++){
-            		payload = random.nextInt(10);
-	            	requestType = i;
-	            	request = new RR(requestType,  payload, false, payload*10);
+            		payload = random.nextInt(1000);
+            		appId = random.nextInt(10);
+	            	request = new RR(appId,  payload, false, payload*10, appId);
 	            	System.out.println("Sending a request ::  " + request.toString());
 	            	oos.writeObject(request);
 	            	//Thread.sleep(1000);

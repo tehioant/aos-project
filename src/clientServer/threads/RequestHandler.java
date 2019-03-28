@@ -10,9 +10,10 @@ import java.util.*;
 
 import requests.RR;
 import requests.Request;
+import solver.Scheduler;
 import factory.*;
 
-public class LibHandler extends Thread {
+public class RequestHandler extends Thread {
 	
 	
 	
@@ -23,7 +24,7 @@ public class LibHandler extends Thread {
 	LinkedList<Request> queueToFactory;
 
 	// Constructor 
-	public LibHandler(Socket s, ObjectInputStream ois, ObjectOutputStream oos, LinkedList<Request> queue) { 
+	public RequestHandler(Socket s, ObjectInputStream ois, ObjectOutputStream oos, LinkedList<Request> queue) { 
 		this.s = s; 
 		this.ois = ois; 
 		this.oos = oos;
@@ -33,7 +34,7 @@ public class LibHandler extends Thread {
 	@Override
 	public void run() { 
  
-		System.out.println("LibHandler in action : waiting for message ..."); 
+		System.out.println("RequestHandler in action : waiting for message ..."); 
 		queueToFactory = new LinkedList<Request>();
 		while (true) { 
 			try { 

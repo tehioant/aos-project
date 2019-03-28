@@ -5,13 +5,15 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
+import dispatcher.DispatcherInterface;
 import requests.Request;
+import solver.ProcessSolver;
 
 public class ApplicationPriority extends Policy{
 
 
-	public ApplicationPriority(LinkedList<Request> request) {
-		super(request);
+	public ApplicationPriority(DispatcherInterface dispInterface, LinkedList<Request> request) {
+		super(dispInterface, request);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -25,57 +27,52 @@ public class ApplicationPriority extends Policy{
 	
 	
 	// Methods
-	
-	
-	
-	public ArrayList<Vector> sortVectorPragma(ArrayList<Vector> vector) {
-		ArrayList<Vector> pragmaList = new ArrayList<Vector>();
-		pragmaList.add(vector.get(0));
-		for(int index=1;  index < vector.size(); index++) {
-			for(int i=0;  i < pragmaList.size(); i++) {
-				if((int) vector.get(index).get(4) >  (int)pragmaList.get(i).get(4)) {
-					pragmaList.add(i, vector.get(index));
-					break;
-				}
-			}
-			if(pragmaList.size() != index+1) {
-				pragmaList.add(vector.get(index));
-			}
-		}
-		return pragmaList;
-	}
-	
-	
-	
-	
-	
 	public String getPolicyName(){
 		return "Application Priority";
 	}
 
 
 	@Override
-	public ArrayList<Request> getScheduled(LinkedList<Request> queue) {
-		ArrayList<Request> schedule = new ArrayList<Request>();
-		schedule.add(queue.poll());
+	public ArrayList<ProcessSolver> getScheduled(LinkedList<Request> queue) {
+		ArrayList<ProcessSolver> schedule = new ArrayList<ProcessSolver>();
+		schedule.add(new ProcessSolver(queue.poll(), 0));
 		Request poll;
 		while(queue.size() > 0){
 			poll = queue.poll();
 			boolean gotIN = false;
 			for(int index=0;  index < schedule.size(); index++) {
-				if(poll.getPriority() > schedule.get(index).getPriority()){
-					schedule.add(index, poll);
-					gotIN = true;
-					break;
+				if(poll.getPriority() > schedule.get(index).getRequest().getPriority()){
+					for(int num=0; num <  super.getDispInterface().getBuffers().size(); num++){
+						if(super.getDispInterface().getBuffers().get(index).getCurrentRessources() > poll.getPayload()){
+							schedule.add(new ProcessSolver(poll, index));
+							gotIN = true;
+							break;
+						}
+					}
 				}
 			}
 			if(!gotIN){
-				schedule.add(poll);
+				for(int num=0; num <  super.getDispInterface().getBuffers().size(); num++){
+					if(super.getDispInterface().getBuffers().get(super.getDispInterface().getBuffers().size()).getCurrentRessources() > poll.getPayload()){
+						schedule.add(new ProcessSolver(poll, super.getDispInterface().getBuffers().size()));
+					}
+				}
 			}
 		}
 		return schedule;
 	}
 
+	
+
+	@Override
+	public long costFunction(ArrayList<ProcessSolver> scheduled) {
+		return 0;
+	}
+
+	
+	
+	
+	
 	
 	
 

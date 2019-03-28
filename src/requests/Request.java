@@ -17,18 +17,21 @@ public abstract class Request implements Serializable, Comparable{
 	public boolean scheduled;
 	public long completionTime;
 	public long stallTime;
+	public int appId;
 	
 	
 	
-	
-	public Request(int priority, int payload, boolean scheduled, long completionTime){
+	public Request(int priority, int payload, boolean scheduled, long completionTime, int appId){
 		this.priority = priority;
 		this.payload = payload;
 		this.scheduled = scheduled;
 		this.completionTime = completionTime;
+		this.appId = appId;
 	}
 
-
+	public Request(){
+		this(0, 0, false, 0, 0);
+	}
 	
 	
 	public int getPriority(){
@@ -91,6 +94,26 @@ public abstract class Request implements Serializable, Comparable{
 	 */
 	public void setStallTime(long stallTime) {
 		this.stallTime = stallTime;
+	}
+
+
+
+
+	/**
+	 * @return the id
+	 */
+	public int getAppId() {
+		return appId;
+	}
+
+
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setAppId(int appId) {
+		this.appId = appId;
 	}
 	
 	

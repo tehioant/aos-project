@@ -1,7 +1,11 @@
 package dispatcher;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 
+import dispatcher.model.Buffer;
+import dispatcher.model.ProcessBuffer;
 import policies.Policy;
 import requests.Request;
 import solver.Solver;
@@ -11,15 +15,14 @@ public class DummyDispatcher {
 	
 	
 	private static DummyDispatcher instance=null;
-	public int maxRessources;
-	public int currentRessources;
-	public int buffers;
+	public ArrayList<Buffer> buffers;
 	
 	
-	private DummyDispatcher(int maxRessources, int buffers){
-		this.maxRessources = maxRessources;
-		this.currentRessources = maxRessources;
-		this.buffers = buffers;
+	private DummyDispatcher(long maxRessources, int buffers){
+		this.buffers = new ArrayList<Buffer>();
+		for(int n=0; n < buffers; n++){ // Creating the buffers with the ressources
+			this.buffers.add(new Buffer(n, maxRessources));
+		}
 	}
 	
 	
@@ -28,57 +31,31 @@ public class DummyDispatcher {
 	}
 	
 	
-	public boolean authorization(int ressources){
-		if(ressources < 200)
-			return true;
-		else
-			return false;
-	}
 
 	
-	public synchronized static DummyDispatcher getInstance(){
+	public synchronized static DummyDispatcher getInstance(long maxRessources, int buffers){
 		if (instance == null) 
-			instance = new DummyDispatcher(); 
+			instance = new DummyDispatcher(maxRessources, buffers); 
         return instance;
 	}
 
 
-	/**
-	 * @return the maxRessources
-	 */
-	public int getMaxRessources() {
-		return maxRessources;
-	}
-
-
-	/**
-	 * @param maxRessources the maxRessources to set
-	 */
-	public void setMaxRessources(int maxRessources) {
-		this.maxRessources = maxRessources;
-	}
+	
 
 
 	/**
 	 * @return the currentRessources
 	 */
-	public int getCurrentRessources() {
-		return currentRessources;
+	public long getCurrentRessources() {
+		return 0;
 	}
 
 
-	/**
-	 * @param currentRessources the currentRessources to set
-	 */
-	public void setCurrentRessources(int currentRessources) {
-		this.currentRessources = currentRessources;
-	}
-	
 	
 	/**
 	 * @return the buffers
 	 */
-	public int getBuffers() {
+	public ArrayList<Buffer> getBuffers() {
 		return buffers;
 	}
 
@@ -86,14 +63,22 @@ public class DummyDispatcher {
 	/**
 	 * @param buffers the buffers to set
 	 */
-	public void setBuffers(int buffers) {
+	public void setBuffers(ArrayList<Buffer> buffers) {
 		this.buffers = buffers;
 	}
+	
+	
+	public void updateBuffers(){
+		for(Buffer buffer : this.getBuffers()){
+			buffer.update();
+		}
+	}
+	
 
 
-	public boolean checkRessources(int ressources){
-		if(this.getCurrentRessources() > ressources){
-			
+	public boolean checkRessources(int bufferId, Request request){
+		this.getBuffers().get(bufferId).update();
+		if(this.getBuffers().get(bufferId).getCurrentRessources() > request.getPayload()){
 			return true;
 		} else {
 			return false;
@@ -101,14 +86,16 @@ public class DummyDispatcher {
 	}
 	
 	
-	public void assignRessources(int ressources){
-		this.setCurrentRessources(this.getCurrentRessources() - ressources);
+	public boolean assignRessources(int bufferId, Request request){
+		if(checkRessources(bufferId, request)){
+			Calendar cal = Calendar.getInstance();
+			this.getBuffers().get(bufferId).getProcess().add(new ProcessBuffer(request, cal.getTimeInMillis()));
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
-	
-	public void releaseRessources(int ressources){
-		this.setCurrentRessources(this.getCurrentRessources() + ressources);
-	}
 	
 	
 	
