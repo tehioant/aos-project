@@ -40,7 +40,9 @@ public class Scheduler {
 		
 		// Schedule requests
 		policy.setCurrentRessources(dispInterface.getCurrentCapacity());
-		schedule = policy.getScheduled(dispInterface, queue);
+		policy.setDispInterface(dispInterface);
+		
+		schedule = policy.getScheduled(queue);
 		
 
 
@@ -50,19 +52,6 @@ public class Scheduler {
 	
 
 	
-	
-	
-	
-	public void buildResponse(){
-		
-	}
-	
-	
-	
-	
-	public void updateQueue(){
-		
-	}
 	
 	
 	

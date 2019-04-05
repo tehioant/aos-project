@@ -53,7 +53,7 @@ public class ApplicationPriority extends Policy{
 			}
 			if(!gotIN){
 				for(int num=0; num <  super.getDispInterface().getBuffers().size(); num++){
-					if(super.getDispInterface().getBuffers().get(super.getDispInterface().getBuffers().size()).getCurrentRessources() > poll.getPayload()){
+					if(super.getDispInterface().getBuffers().get(super.getDispInterface().getBuffers().size()-1).getCurrentRessources() > poll.getPayload()){
 						schedule.add(new ProcessSolver(poll, super.getDispInterface().getBuffers().size()));
 					}
 				}

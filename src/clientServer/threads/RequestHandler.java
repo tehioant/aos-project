@@ -10,6 +10,7 @@ import java.util.*;
 
 import requests.RR;
 import requests.Request;
+import solver.ProcessSolver;
 import solver.Scheduler;
 import factory.*;
 
@@ -50,7 +51,7 @@ public class RequestHandler extends Thread {
 				System.out.println("All requests received"); 
 				System.out.println("Processing ..."); 
 				
-				ArrayList<Request> response = Scheduler.getResponse(queueToFactory);
+				ArrayList<ProcessSolver> response = Scheduler.getResponse(queueToFactory);
 				System.out.println("End process : Sending ... ");
 				System.out.println("Message sent :/  " + response.toString());
             	oos.writeObject(response);
