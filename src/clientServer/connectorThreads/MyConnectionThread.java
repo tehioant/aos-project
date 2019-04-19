@@ -52,16 +52,10 @@ public class MyConnectionThread extends Thread {
 	@Override
 	public void run() { 
 		// socket object to receive incoming client requests  
-		System.out.println("A new client is connected : " + con); 
+		// add request to the queue
 		this.addConnection(Integer.toString(this.id));
-		System.out.println("I am handling the connection..."); 
-		while (true) { 
-			//Request request;
-				//request = (Request) ois.readObject();
-				queue.add(req);
-				
-			
-				
+		while (true) {
+			queue.add(req);
 			
 		} 
 		

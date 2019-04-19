@@ -1,6 +1,7 @@
 package dispatcher.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 import requests.Request;
@@ -11,6 +12,8 @@ public class Buffer {
 	public long capacity;
 	public LinkedList<Request> queue;
 	public ArrayList<ProcessBuffer> process;
+	public ArrayList<Application> apps;
+	public LinkedList<Application> appQueue;
 	
 	
 	public Buffer(int id, long capacity){
@@ -18,6 +21,8 @@ public class Buffer {
 		this.capacity = capacity;
 		queue = new LinkedList<Request>();
 		process = new ArrayList<ProcessBuffer>();
+		apps = new ArrayList<Application>();
+		appQueue = new LinkedList<Application>();
 	}
 
 
@@ -73,7 +78,8 @@ public class Buffer {
 	 * @return the currentRessources
 	 */
 	public long getCurrentRessources() {
-		this.update();
+		this.updateProcess();
+		this.updateApplication();
 		long ressources = this.getCapacity();
 		for(ProcessBuffer process : this.getProcess()){
 			ressources -= process.getRequest().getPayload();
@@ -100,20 +106,75 @@ public class Buffer {
 	}
 	
 	
-	public void update(){
+	/**
+	 * @return the apps
+	 */
+	public ArrayList<Application> getApps() {
+		return apps;
+	}
+
+
+	/**
+	 * @param apps the apps to set
+	 */
+	public void setApps(ArrayList<Application> apps) {
+		this.apps = apps;
+	}
+	
+	
+	
+	public void addApp(Application app){
+		if(this.getApps().size() > 3){
+			this.getAppQueue().add(app);
+		} else {
+			this.getApps().add(app);
+		}
+	}
+
+
+	/**
+	 * @return the appQueue
+	 */
+	public LinkedList<Application> getAppQueue() {
+		return appQueue;
+	}
+
+
+	/**
+	 * @param appQueue the appQueue to set
+	 */
+	public void setAppQueue(LinkedList<Application> appQueue) {
+		this.appQueue = appQueue;
+	}
+
+
+	public void updateProcess(){
 		float r;
+		Calendar cal = Calendar.getInstance();
 		for(ProcessBuffer process : this.getProcess()){
 			r = process.getRemainingTime();
 			if(r <= 0){
 				this.getProcess().remove(process);
+				this.getProcess().add(new ProcessBuffer(this.getQueue().poll(), cal.getTimeInMillis()));
 			} else {
 				process.setRemainingTime(r);
 			}
 		}
-		
+	}
+	public void updateApplication(){
+		float r;
+		Calendar cal = Calendar.getInstance();
+		for(Application app : this.getApps()){
+			r = cal.getTimeInMillis() - (app.getAppCompTime() + app.getListRequest().get(0).getStartTime());
+			if(r <= 0){
+				this.getApps().remove(app);
+			}
+		}
 	}
 	
-
+	
+	
+	
 	
 	
 	

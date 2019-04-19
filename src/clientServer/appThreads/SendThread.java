@@ -19,8 +19,7 @@ public class SendThread extends Thread {
 	
 	
 	
-	
-	
+	/**
 	
 	
 	public void run(){
@@ -42,7 +41,7 @@ public class SendThread extends Thread {
 	
 	
 	
-	
+	**/
 	
 	
 	

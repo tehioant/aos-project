@@ -31,17 +31,18 @@ public class Scheduler {
 	
 	public static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
 		
-		System.out.println("Request : "+ queue); 
+		//System.out.println("Request : "+ queue); 
 		
 		// Prepare Policy
-		solver.setPolicy(POLICY_TYPE);
+		solver.setPolicy(POLICY_TYPE, queue);
 		policy = solver.getPolicy();
-		System.out.println("Policy : " + policy.getPolicyName()); 
+		//System.out.println("Policy : " + policy.getPolicyName()); 
 		
 		// Schedule requests
 		policy.setCurrentRessources(dispInterface.getCurrentCapacity());
 		policy.setDispInterface(dispInterface);
 		
+		System.out.println("Scheduler;Scheduling with : " + policy.getPolicyName()); 
 		schedule = policy.getScheduled(queue);
 		
 

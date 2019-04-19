@@ -21,7 +21,7 @@ utilization while maintaining the same or smaller average remaining
 capacity  leading  to  better  buffer  efficiency.  In  our  example,
 Harmonia,  under  this  policy  will  schedule  app  1  at t=0  and
 will run on top of both buffers hence maximum I/O bandwidth.
-App 2 will start at t=2, effectively overlapping its computation
+Lib 2 will start at t=2, effectively overlapping its computation
 phases with the I/O phase of app 1. Additionally, the buffers
 will start flushing as soon as data are available, practically at
 t=3,  and  it  will  keep  flushing  during  both  computations  and

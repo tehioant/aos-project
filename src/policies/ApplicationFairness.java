@@ -92,7 +92,7 @@ public class ApplicationFairness extends Policy{
 			if(this.appList.size()/3 < super.getDispInterface().getNbMaxBuffers()){ // not enough buffers for every app
 				for(Application app : this.appList){ // the scheduling is made randomly between apps
 					randomReq = random.nextInt(ran-1);
-					// TODO   Must ensure that all App have the same ressources
+					// TODO   Must ensure that all Lib have the same ressources
 					for(Buffer buffer : super.getDispInterface().getBuffers()){
 						if(buffer.getProcess().size() < 3 && buffer.getCurrentRessources() > this.appList.get(randomReq).getAppPayload()){
 							for(Request request : this.appList.get(randomReq).getListRequest()){

@@ -60,22 +60,22 @@ public class Solver{
 		return this.policy;
 	}
 	
-	public void setPolicy(String policy){
+	public void setPolicy(String policy, LinkedList<Request> queue){
 		switch (policy) {
 			case "ApplicationPriority":
-				this.policy = new ApplicationPriority();
+				this.policy = new ApplicationPriority(null, queue);
 				break;
 			case "ApplicationFairness":
-				this.policy = new ApplicationFairness();
+				this.policy = new ApplicationFairness(null, queue);
 				break;
 			case "MaxApplicationBandwidth":
-				this.policy = new MaxApplicationBandwidth();
+				this.policy = new MaxApplicationBandwidth(null, queue);
 				break;
 			case "MaxBufferEfficiency":
-				this.policy = new MaxBufferEfficiency();
+				this.policy = new MaxBufferEfficiency(null, queue);
 				break;
 			case "MinStallTime":
-				this.policy = new MinStallTime();
+				this.policy = new MinStallTime(null, queue);
 				break;
 		}
 			

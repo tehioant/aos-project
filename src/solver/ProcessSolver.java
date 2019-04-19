@@ -14,7 +14,9 @@ public class ProcessSolver {
 	}
 
 	
-	
+	public ProcessSolver(){
+		this(null, 0);
+	}
 	
 	
 	

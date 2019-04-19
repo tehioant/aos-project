@@ -55,6 +55,11 @@ public class DispatcherInterface {
 		return this.getDispatcher().checkRessources(bufferId, request);
 	}
 	
+	
+	public void update(){
+		dispatcher.updateBuffers();
+	}
+	
 
 }
 

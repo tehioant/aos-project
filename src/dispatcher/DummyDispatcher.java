@@ -70,14 +70,16 @@ public class DummyDispatcher {
 	
 	public void updateBuffers(){
 		for(Buffer buffer : this.getBuffers()){
-			buffer.update();
+			buffer.updateProcess();
+			buffer.updateApplication();
 		}
 	}
 	
 
 
 	public boolean checkRessources(int bufferId, Request request){
-		this.getBuffers().get(bufferId).update();
+		this.getBuffers().get(bufferId).updateProcess();
+		this.getBuffers().get(bufferId).updateApplication();
 		if(this.getBuffers().get(bufferId).getCurrentRessources() > request.getPayload()){
 			return true;
 		} else {

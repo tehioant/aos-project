@@ -18,6 +18,7 @@ public abstract class Request implements Serializable, Comparable{
 	public long completionTime;
 	public long stallTime;
 	public int appId;
+	public long startTime;
 	
 	
 	
@@ -117,6 +118,24 @@ public abstract class Request implements Serializable, Comparable{
 	}
 	
 	
+	
+	
+	/**
+	 * @return the id
+	 */
+	public long getStartTime() {
+		return this.startTime;
+	}
+
+
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
 	
 	
 }

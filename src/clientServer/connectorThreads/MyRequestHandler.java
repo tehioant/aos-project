@@ -11,7 +11,6 @@ import java.util.*;
 import com.esotericsoftware.kryonet.Connection;
 
 import requests.*;
-import clientServer.Response;
 import solver.*;
 
 
@@ -27,6 +26,7 @@ public class MyRequestHandler extends Thread {
 	Request request;
 	LinkedList<Request> queue;
 	LinkedList<Request> queueToFactory;
+	ArrayList<ProcessSolver> listSend;
 
 	// Constructor 
 	public MyRequestHandler(Connection c, Request request, LinkedList<Request> queue) { 
@@ -39,35 +39,22 @@ public class MyRequestHandler extends Thread {
 	@Override
 	public void run() { 
  
-		System.out.println("RequestHandler in action : waiting for message ..."); 
-		queueToFactory = new LinkedList<Request>();
 		while (true) { 
 			try { 
-				Calendar cal = Calendar.getInstance();
-		        long startTime = cal.getTimeInMillis();
-		        long currentTime = startTime;
-		        
-		        while(queueToFactory.size() < 100 && currentTime < startTime + 1000 ){
-		        	this.queueToFactory.add(this.queue.poll());
-		        	currentTime = cal.getTimeInMillis();
-		        }
-		        
-				System.out.println("All requests received"); 
-				System.out.println("Processing ..."); 
-				
-				ArrayList<ProcessSolver> response = Scheduler.getResponse(queueToFactory);
-				//ArrayList response = Scheduler.getResponse(queueToFactory);
+				System.out.println("All requests received: Processing ..." + queue);
+				ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
 				System.out.println("End process : Sending ... ");
 				
-				//System.out.println("Message sent :/  " + response.toString());
-            	//oos.writeObject(response);
-            	con.sendTCP(response);
+				for(ProcessSolver process : response){
+					con.sendTCP(process);
+				}
 				System.out.println("Response scheduler sent... "); 
 				
             	break;
             	
 			} catch (NullPointerException e) { 
 				e.printStackTrace(); 
+				System.out.println("Null pointer MyRequestHandler");
 				continue;
 			} 
 		} 
