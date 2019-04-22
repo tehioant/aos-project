@@ -84,9 +84,7 @@ public class MaxBufferEfficiency extends Policy{
 				}
 			}
 			while(true){
-		
 				if(super.getDispInterface().processRequest(r, request)){
-					
 					scheduled.add(new ProcessSolver(request, r));
 					break;
 				}

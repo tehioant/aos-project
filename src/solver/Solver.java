@@ -38,8 +38,11 @@ public class Solver{
 
 	
 	public synchronized static Solver getInstance(){
-		if (instance == null) 
-			instance = new Solver(); 
+		if (instance == null){
+			synchronized(Solver.class){
+				instance = new Solver(); 
+			}
+		}
         return instance;
 	}
 	

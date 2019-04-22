@@ -3,6 +3,7 @@ package dispatcher.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import requests.Request;
 
@@ -148,17 +149,26 @@ public class Buffer {
 	}
 
 
-	public void updateProcess(){
-		float r;
-		Calendar cal = Calendar.getInstance();
-		for(ProcessBuffer process : this.getProcess()){
-			r = process.getRemainingTime();
-			if(r <= 0){
-				this.getProcess().remove(process);
-				this.getProcess().add(new ProcessBuffer(this.getQueue().poll(), cal.getTimeInMillis()));
-			} else {
-				process.setRemainingTime(r);
+	public synchronized void updateProcess(){
+		try{
+			
+			float r;
+			Calendar cal = Calendar.getInstance();
+			if(!this.getProcess().isEmpty()){
+				for(ProcessBuffer process : this.getProcess()){
+					r = process.getRemainingTime();
+					if(r <= 0){
+						this.getProcess().remove(process);
+						if(this.getQueue().getFirst() instanceof Request)
+							this.getProcess().add(new ProcessBuffer(this.getQueue().poll(), cal.getTimeInMillis()));
+					} else {
+						process.setRemainingTime(r);
+					}
+				}
 			}
+		} catch(NoSuchElementException e){
+			// This means the queue is empty and then we don't create an empty process
+			//e.printStackTrace();
 		}
 	}
 	public void updateApplication(){

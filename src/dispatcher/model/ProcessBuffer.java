@@ -68,7 +68,7 @@ public class ProcessBuffer {
 	public float getRemainingTime() {
 		Calendar cal = Calendar.getInstance();
         long time = cal.getTimeInMillis();
-		return this.getRequest().getCompletionTime() - (time - this.getStartTime());
+    	return this.getRequest().getCompletionTime() - (time - this.getStartTime());
 	}
 
 

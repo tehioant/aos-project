@@ -2,6 +2,7 @@ package clientServer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import com.esotericsoftware.kryonet.Client;
@@ -63,13 +64,24 @@ public class Lib extends Listener {
 		
 		System.out.println("Connected to Server");
 		
-		Application app = new Application();
-		ArrayList<Request> list = app.getList();
+		ArrayList<Application> listApps = new ArrayList<Application>();
+		
+		Application app1 = new Application(1);
+		listApps.add(app1);
+		Application app2 = new Application(2);
+		listApps.add(app2);
+		Application app3 = new Application(3);
+		listApps.add(app3);
+		
+		ArrayList<Request> list = app1.getList();
+		list.addAll(app2.getList());
+		list.addAll(app3.getList());
+		Collections.shuffle(list);
 		for(Request request : list){
-
 			c.sendTCP(request);
 		}
-		System.out.println("All request sent => " + list.size());
+		System.out.println("All request sent for app : => " + list.size());
+	
 	}
 	
 	public void received(Connection c, Object r) {

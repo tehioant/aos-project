@@ -45,7 +45,7 @@ public class DispatcherInterface {
 	}
 	
 	
-	public ArrayList<Buffer> getBuffers() {
+	public synchronized ArrayList<Buffer> getBuffers() {
 		this.getDispatcher().updateBuffers();
 		return this.getDispatcher().getBuffers();
 	}

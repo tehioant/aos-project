@@ -68,7 +68,7 @@ public class DummyDispatcher {
 	}
 	
 	
-	public void updateBuffers(){
+	public synchronized void updateBuffers(){
 		for(Buffer buffer : this.getBuffers()){
 			buffer.updateProcess();
 			buffer.updateApplication();

@@ -11,9 +11,11 @@ public class Application {
 	
 	ArrayList<Request> list;
 	static int totalRequest = 200;
+	int id;
 	
-	public Application(){
+	public Application(int id){
 		list = this.createRequest();
+		this.id = id;
 	}
 	
 	
@@ -27,7 +29,7 @@ public class Application {
 		for(int i =0; i < totalRequest; i++) {
         	payload = random.nextInt(1000);
         	appId = random.nextInt(10);
-        	requests.add(new RR(i,  payload, false, payload*10, appId));
+        	requests.add(new RR(i,  payload, false, payload, this.id));
 		}
 		
 		return requests;
@@ -38,5 +40,11 @@ public class Application {
 		return this.list;
 	}
 	
-
+	
+	public int getID(){
+		return this.id;
+	}
+	
+	
+	
 }

@@ -29,7 +29,7 @@ public class Scheduler {
 	
 	
 	
-	public static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
+	public synchronized static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
 		
 		//System.out.println("Request : "+ queue); 
 		

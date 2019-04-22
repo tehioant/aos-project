@@ -41,24 +41,20 @@ public class MyRequestHandler extends Thread {
  
 		while (true) { 
 			try { 
-				synchronized(Scheduler.getDispatcherInterface().getDispatcher()) {
-					System.out.println("---------------------------------------------" + Thread.currentThread());
-					System.out.println("All requests received: Processing ..." + queue.size() + " / " + queue.get(0).getPriority() + " / " + queue.get(queue.size()-1).getPriority());
-					ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
-					System.out.println("End process : Sending ... " + response.size());
-					
-					for(ProcessSolver process : response){
-						con.sendTCP(process);
-					}
-					System.out.println("Response scheduler sent... " + Thread.currentThread()); 
-					System.out.println("---------------------------------------------");
-	            	break;
-				}
+				System.out.println("---------------------------------------------" + Thread.currentThread());
+				System.out.println("All requests received: Processing ..." + queue.size() + " / " + queue.get(0).getPriority() + " / " + queue.get(queue.size()-1).getPriority() + Thread.currentThread());
+				ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
+				System.out.println("End process : Sending ... " + response.size()  + Thread.currentThread());
 				
-            	
+				for(ProcessSolver process : response){
+					con.sendTCP(process);
+				}
+				System.out.println("Response scheduler sent... " + Thread.currentThread()); 
+				System.out.println("---------------------------------------------");
+            	break;
+
 			} catch (NullPointerException e) { 
 				e.printStackTrace(); 
-				System.out.println("Null pointer MyRequestHandler");
 				continue;
 			} 
 		} 

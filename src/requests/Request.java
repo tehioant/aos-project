@@ -66,7 +66,7 @@ public abstract class Request implements Serializable, Comparable{
 	 * @return the completionTime
 	 */
 	public long getCompletionTime() {
-		return completionTime;
+		return this.completionTime;
 	}
 
 
@@ -84,7 +84,7 @@ public abstract class Request implements Serializable, Comparable{
 	 * @return the stallTime
 	 */
 	public long getStallTime() {
-		return stallTime;
+		return this.stallTime;
 	}
 
 
