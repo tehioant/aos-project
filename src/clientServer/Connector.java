@@ -89,6 +89,10 @@ public class Connector extends Listener {
 				pool.execute(new MyRequestHandler(c, request, queueToFactory)); 
 				startTime = cal.getTimeInMillis();
 			}
+		} else if(o instanceof FrameworkMessage){
+			System.out.println("FrameworkMessage : " + o.toString());
+		
+		
 		} else {
 			System.out.println("not request type : " + o.getClass());
 			

@@ -1,4 +1,4 @@
-package clientServer.appThreads;
+package clientServer.libThreads;
 
 import java.util.Random;
 

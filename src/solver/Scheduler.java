@@ -25,7 +25,7 @@ public class Scheduler {
 	public static Policy policy;
 	public static ArrayList<ProcessSolver> schedule;
 	public static DispatcherInterface dispInterface = new DispatcherInterface();
-	public static String POLICY_TYPE = "ApplicationPriority";
+	public static String POLICY_TYPE = "MaxBufferEfficiency";
 	
 	
 	
@@ -51,10 +51,14 @@ public class Scheduler {
 	}
 	
 	
-
+	public static Solver getSolver(){
+		return Scheduler.solver;
+	}
 	
 	
-	
+	public static DispatcherInterface getDispatcherInterface(){
+		return Scheduler.dispInterface;
+	}
 	
 	
 }

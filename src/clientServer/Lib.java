@@ -7,12 +7,15 @@ import java.util.Random;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
+
+import clientServer.libThreads.*;
+
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 
 import requests.RR;
 import requests.Request;
 import solver.ProcessSolver;
-import clientServer.appThreads.*;
 
 public class Lib extends Listener {
 
@@ -21,11 +24,13 @@ public class Lib extends Listener {
 	static int tcpPort = 33278;
 	static int timeout = 500000000; //5000 msec wait time before failing
 	static int totalRequest = 200;
+	static int tot;
 	
 	static boolean responseReceived = false;
 	
 	public static void main(String args[]) throws Exception{
 		client = new Client(16384, 16384);
+		tot = 0;
 		
 		client.getKryo().register(RR.class);
 		client.getKryo().register(Request.class);
@@ -64,17 +69,25 @@ public class Lib extends Listener {
 
 			c.sendTCP(request);
 		}
-		System.out.println("All request sent =>");
+		System.out.println("All request sent => " + list.size());
 	}
 	
 	public void received(Connection c, Object r) {
 			System.out.println("--------------------");
 			try{
-				ProcessSolver response = (ProcessSolver) r;
-				//ProcessSolver response = (ProcessSolver) r;
-				// for(ProcessSolver proc : response){ System.out.println("Request Lib ID  : "+ proc.getRequest().getAppId()); }
-				System.out.println("Request buffer ID  : " + response.getBufferId());
+				
+				if(r instanceof ProcessSolver){
+					ProcessSolver response = (ProcessSolver) r;
+					//ProcessSolver response = (ProcessSolver) r;
+					// for(ProcessSolver proc : response){ System.out.println("Request Lib ID  : "+ proc.getRequest().getAppId()); }
+					//System.out.println("Request App ID  : " + response.getRequest().getAppId());
+					tot ++;
+				} else if(r instanceof FrameworkMessage){
+					System.out.println("FrameworkMessage : " + r.toString());
+				}
 		
+				System.out.println("Total requests received : " + tot);
+				
 			} catch (Exception e) { 
 				e.printStackTrace(); 
 			} 
@@ -86,7 +99,7 @@ public class Lib extends Listener {
 	
 	
 	public void disconnected(Connection c) {
-		System.out.println("Disconnected / reconnecting ...");
+		System.out.println("Disconnected.");
 		/**
 		try {
 			client.connect(timeout,ip,tcpPort);

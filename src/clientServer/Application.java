@@ -27,7 +27,7 @@ public class Application {
 		for(int i =0; i < totalRequest; i++) {
         	payload = random.nextInt(1000);
         	appId = random.nextInt(10);
-        	requests.add(new RR(appId,  payload, false, payload*10, appId));
+        	requests.add(new RR(i,  payload, false, payload*10, appId));
 		}
 		
 		return requests;
