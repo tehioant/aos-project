@@ -104,7 +104,6 @@ public class ApplicationFairness extends Policy{
 				}
 				break;
 			} else {
-				// TODO Else when more than 3 app by buffer
 				ArrayList<Application> listmiddle = new ArrayList<Application>();
 				for(int f=0; f < super.getDispInterface().getNbMaxBuffers()*3; f++){
 					listmiddle.add(appList.get(f));
@@ -159,12 +158,6 @@ public class ApplicationFairness extends Policy{
 			if(listOfApps.size() == 0){
 				listOfApps.add(new Application(null, request.getAppId()));
 				listOfApps.get(0).addRequest(request);
-			}
-		}
-		int count = 0;
-		for(Application appp : listOfApps){
-			for(Request r : appp.getListRequest()){
-				count++;
 			}
 		}
 		return listOfApps;

@@ -50,41 +50,6 @@ public class MinStallTime extends Policy{
 		}
 		return scheduled;
 	}
-		
-		/**
-		// First select randomly an app to schedule
-		int randomReq;
-		Application application;
-		int k;
-		while(true){ // while buffers are available
-			randomReq = random.nextInt(this.appList.size()-1);
-			application = this.appList.get(randomReq);
-			k = this.assignToBuffer(application);
-			if(k != -1){
-				for(int index=0; index < application.getListRequest().size(); index++){
-					scheduled.add(new ProcessSolver(application.getListRequest().get(index), k));
-				}
-			} else {
-				break;
-			}
-			this.appList.remove(randomReq);
-		}
-		if(this.appList.isEmpty()){
-			return scheduled;
-		} else {
-			int id;
-			for(Application app : this.appList){
-				id = this.getMinStallTimeBuffer();
-				for(int i=0; i < app.getListRequest().size(); i++){
-					scheduled.add(new ProcessSolver(app.getListRequest().get(i), id));
-					super.getDispInterface().getBuffers().get(id).getQueue().add(app.getListRequest().get(i));
-				}
-			}
-		return scheduled;
-		}
-	}
-	
-	**/
 	
 	
 
@@ -112,13 +77,6 @@ public class MinStallTime extends Policy{
 				listOfApps.get(0).addRequest(request);
 			}
 		}
-		int count = 0;
-		for(Application appp : listOfApps){
-			for(Request r : appp.getListRequest()){
-				count++;
-			}
-		}
-		System.out.println("number of requests getAllApps() " + count);
 		return listOfApps;
 	}
 	

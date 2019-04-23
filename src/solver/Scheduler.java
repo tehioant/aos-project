@@ -25,7 +25,7 @@ public class Scheduler {
 	public static Policy policy;
 	public static ArrayList<ProcessSolver> schedule;
 	public static DispatcherInterface dispInterface = new DispatcherInterface();
-	public static String POLICY_TYPE = "MinStallTime";
+	public static String POLICY_TYPE = "MaxApplicationBandwidth";
 	
 	
 	

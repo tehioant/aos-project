@@ -88,31 +88,29 @@ public class MaxApplicationBandwidth extends Policy{
 	
 	
 	
-	public ArrayList<Application> getAllApps(LinkedList<Request> queue){
-		ArrayList<Application> apps = new ArrayList<Application>();
-		List<Integer> list = new ArrayList<Integer>();
-		list.add(queue.get(0).getAppId());
-		Application application;
-		for(Request item : queue ){
-			for(int i : list){
-				if(item.getAppId() != i){
-					list.add(item.getAppId());
-				}
-			}
-		}
-		for(int app : list){
-			application = new Application();
-			application.setAppId(app);
-			apps.add(application);
-		}
+public ArrayList<Application> getAllApps(LinkedList<Request> queue){
+		
+		ArrayList<Application> listOfApps = new ArrayList<Application>();
+		int num = 0;
 		for(Request request : queue){
-			for(Application m : apps){
-				if(request.getAppId() == m.getAppId()){
-					m.addRequest(request);
+			num++;
+			for(int ap=0; ap < listOfApps.size(); ap++){
+				if(request.getAppId() == listOfApps.get(ap).getAppId()){
+					listOfApps.get(ap).addRequest(request);
+					break;
+				} else if(ap == listOfApps.size()-1){
+					listOfApps.add(new Application(null, request.getAppId()));
+					listOfApps.get(listOfApps.size()-1).addRequest(request);
+					break;
 				}
+				
+			}
+			if(listOfApps.size() == 0){
+				listOfApps.add(new Application(null, request.getAppId()));
+				listOfApps.get(0).addRequest(request);
 			}
 		}
-		return apps;
+		return listOfApps;
 	}
 	
 	public Application getApplication(LinkedList<Request> queue, int id){
