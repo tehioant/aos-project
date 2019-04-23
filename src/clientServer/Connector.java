@@ -31,7 +31,7 @@ public class Connector extends Listener {
 	LinkedList<Request> queueToFactory;
 	
 	public static LinkedList<Request> queue;
-	ExecutorService pool = Executors.newFixedThreadPool(3);
+	ExecutorService pool = Executors.newFixedThreadPool(20);
 	
 	public static void main(String[] args) throws Exception {
 		

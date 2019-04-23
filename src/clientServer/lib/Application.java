@@ -10,7 +10,7 @@ public class Application {
 	
 	
 	ArrayList<Request> list;
-	static int totalRequest = 200;
+	static int totalRequest = 1000;
 	int id;
 	
 	public Application(int id){

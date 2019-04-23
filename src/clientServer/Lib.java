@@ -24,7 +24,7 @@ public class Lib extends Listener {
 	static String ip = "localhost";
 	static int tcpPort = 33278;
 	static int timeout = 500000000; //5000 msec wait time before failing
-	static int totalRequest = 200;
+	static int totalRequest = 1000;
 	static int tot;
 	
 	static boolean responseReceived = false;
@@ -66,17 +66,17 @@ public class Lib extends Listener {
 		
 		ArrayList<Application> listApps = new ArrayList<Application>();
 		
-		Application app1 = new Application(1);
-		listApps.add(app1);
-		Application app2 = new Application(2);
-		listApps.add(app2);
-		Application app3 = new Application(3);
-		listApps.add(app3);
+		for(int num=1; num <= 20; num++){
+			listApps.add(new Application(num));
+		}
 		
-		ArrayList<Request> list = app1.getList();
-		list.addAll(app2.getList());
-		list.addAll(app3.getList());
+		ArrayList<Request> list = new ArrayList<Request>();
+		for(Application app : listApps){
+			list.addAll(app.getList());
+		}
 		Collections.shuffle(list);
+		
+		// sending requests
 		for(Request request : list){
 			c.sendTCP(request);
 		}
