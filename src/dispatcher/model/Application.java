@@ -34,6 +34,8 @@ public class Application {
 	 * @return the request
 	 */
 	public ArrayList<Request> getListRequest() {
+		if(listRequest == null)
+			return new ArrayList<Request>();
 		return listRequest;
 	}
 

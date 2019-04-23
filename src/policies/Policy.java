@@ -15,7 +15,6 @@ public abstract class Policy {
 	public static final String DEFAULT_MODE = "ApplicationPriority";
 	
 	public LinkedList<Request> requests;
-	public long currentRessources;
 	public int buffers;
 	public DispatcherInterface dispInterface;
 	
@@ -42,28 +41,6 @@ public abstract class Policy {
 	public void setRequests(LinkedList<Request> requests) {
 		this.requests = requests;
 	}
-	
-
-	
-	
-	
-	/**
-	 * @return the currentRessources
-	 */
-	public long getCurrentRessources() {
-		return currentRessources;
-	}
-
-
-	/**
-	 * @param currentRessources the currentRessources to set
-	 */
-	public void setCurrentRessources(long currentRessources) {
-		this.currentRessources = currentRessources;
-	}
-	
-	
-	
 	
 
 

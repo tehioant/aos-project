@@ -9,7 +9,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
-import clientServer.libThreads.*;
+import clientServer.lib.*;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
@@ -85,7 +85,7 @@ public class Lib extends Listener {
 	}
 	
 	public void received(Connection c, Object r) {
-			System.out.println("--------------------");
+			System.out.println("\n--------------------");
 			try{
 				
 				if(r instanceof ProcessSolver){

@@ -25,11 +25,11 @@ public class Scheduler {
 	public static Policy policy;
 	public static ArrayList<ProcessSolver> schedule;
 	public static DispatcherInterface dispInterface = new DispatcherInterface();
-	public static String POLICY_TYPE = "MaxBufferEfficiency";
+	public static String POLICY_TYPE = "ApplicationPriority";
 	
 	
 	
-	public synchronized static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
+	public static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
 		
 		//System.out.println("Request : "+ queue); 
 		
@@ -39,7 +39,6 @@ public class Scheduler {
 		//System.out.println("Policy : " + policy.getPolicyName()); 
 		
 		// Schedule requests
-		policy.setCurrentRessources(dispInterface.getCurrentCapacity());
 		policy.setDispInterface(dispInterface);
 		
 		System.out.println("Scheduler;Scheduling with : " + policy.getPolicyName()); 

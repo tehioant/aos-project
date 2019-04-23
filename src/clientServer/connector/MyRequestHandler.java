@@ -1,4 +1,4 @@
-package clientServer.connectorThreads;
+package clientServer.connector;
 
 //import java.io.DataInputStream;
 //import java.io.DataOutputStream;
@@ -41,8 +41,8 @@ public class MyRequestHandler extends Thread {
  
 		while (true) { 
 			try { 
-				System.out.println("---------------------------------------------" + Thread.currentThread());
-				System.out.println("All requests received: Processing ..." + queue.size() + " / " + queue.get(0).getPriority() + " / " + queue.get(queue.size()-1).getPriority() + Thread.currentThread());
+				System.out.println("---------------------------------------------  " + Thread.currentThread());
+				System.out.println("All requests received: Processing ...");
 				ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
 				System.out.println("End process : Sending ... " + response.size()  + Thread.currentThread());
 				

@@ -1,4 +1,4 @@
-package clientServer.libThreads;
+package clientServer.lib;
 
 import java.util.ArrayList;
 

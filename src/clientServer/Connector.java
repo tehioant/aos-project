@@ -12,8 +12,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
-import clientServer.connectorThreads.MyConnectionThread;
-import clientServer.connectorThreads.MyRequestHandler;
+import clientServer.connector.MyConnectionThread;
+import clientServer.connector.MyRequestHandler;
 import requests.RR;
 import requests.Request;
 import solver.ProcessSolver;
@@ -74,30 +74,30 @@ public class Connector extends Listener {
 	public void received(Connection c, Object o) {
 		currentTime = cal.getTimeInMillis();
 		//System.out.println("Received request " + id);// + "  " + o.getClass());
-		
-		if(o instanceof Request) {
-			
-			Request request = (Request) o;
-			queue.add(request);
-			//System.out.println("Queue size : " + queue.size());
-			if(queue.size() >= 100 || currentTime > startTime + 1000){
-				queueToFactory = new LinkedList<Request>();
-				for(int index=0; index < 100; index++){
-					queueToFactory.add(queue.poll());
+			if(o instanceof Request) {
+				
+				Request request = (Request) o;
+				queue.add(request);
+				//System.out.println("Queue size : " + queue.size());
+				if(queue.size() >= 100 || currentTime > startTime + 1000){
+					queueToFactory = new LinkedList<Request>();
+					for(int index=0; index < 100; index++){
+						queueToFactory.add(queue.poll());
+					}
+					System.out.println(" \n__Starting handler in pool : " + queueToFactory.size());
+					pool.execute(new MyRequestHandler(c, request, queueToFactory)); 
+					
+					startTime = cal.getTimeInMillis();
 				}
-				System.out.println("Starting handler in pool : " + queueToFactory.size());
-				pool.execute(new MyRequestHandler(c, request, queueToFactory)); 
-				startTime = cal.getTimeInMillis();
-			}
-		} else if(o instanceof FrameworkMessage){
-			System.out.println("FrameworkMessage : " + o.toString());
-		
-		
-		} else {
-			System.out.println("not request type : " + o.getClass());
+			} else if(o instanceof FrameworkMessage){
+				System.out.println("FrameworkMessage : " + o.toString());
 			
-		}
-		id++;
+			
+			} else {
+				System.out.println("not request type : " + o.getClass());
+				
+			}
+			id++;
 	}
 	
 	public void disconnected(Connection c) {

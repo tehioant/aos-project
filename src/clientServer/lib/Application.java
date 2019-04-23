@@ -1,4 +1,4 @@
-package clientServer;
+package clientServer.lib;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,8 +14,8 @@ public class Application {
 	int id;
 	
 	public Application(int id){
-		list = this.createRequest();
 		this.id = id;
+		list = this.createRequest();
 	}
 	
 	
@@ -31,7 +31,6 @@ public class Application {
         	appId = random.nextInt(10);
         	requests.add(new RR(i,  payload, false, payload, this.id));
 		}
-		
 		return requests;
 	}
 	
