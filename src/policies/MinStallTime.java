@@ -10,6 +10,7 @@ import java.util.Random;
 import dispatcher.DispatcherInterface;
 import dispatcher.model.Application;
 import dispatcher.model.Buffer;
+import dispatcher.model.ProcessBuffer;
 import requests.Request;
 import solver.ProcessSolver;
 
@@ -42,7 +43,15 @@ public class MinStallTime extends Policy{
 	@Override
 	public ArrayList<ProcessSolver> getScheduled(LinkedList<Request> queue) {
 		ArrayList<ProcessSolver> scheduled = new ArrayList<ProcessSolver>();
+		Buffer buffer = null;
+		for(int index=0; index < queue.size(); index++){
+			buffer = this.getMinStallTimeBuffer();
+			scheduled.add(new ProcessSolver(queue.get(index), buffer.getId()));
+		}
+		return scheduled;
+	}
 		
+		/**
 		// First select randomly an app to schedule
 		int randomReq;
 		Application application;
@@ -75,69 +84,70 @@ public class MinStallTime extends Policy{
 		}
 	}
 	
-	
-	
-	
-	
-
-	// TODO 
-	public void costFunction(LinkedList<Request> queue){
-		int cost = 0;
-		for(Request req : queue){
-			cost += (req.getStallTime());
-		}
-	}
-	
-	
-	
+	**/
 	
 	
 
 	
 	
 	public ArrayList<Application> getAllApps(LinkedList<Request> queue){
-		ArrayList<Application> apps = new ArrayList<Application>();
-		List<Integer> list = new ArrayList<Integer>();
-		list.add(queue.get(0).getAppId());
-		Application application;
-		for(Request item : queue ){
-			for(int i : list){
-				if(item.getAppId() != i){
-					list.add(item.getAppId());
+		
+		ArrayList<Application> listOfApps = new ArrayList<Application>();
+		int num = 0;
+		for(Request request : queue){
+			num++;
+			for(int ap=0; ap < listOfApps.size(); ap++){
+				if(request.getAppId() == listOfApps.get(ap).getAppId()){
+					listOfApps.get(ap).addRequest(request);
+					break;
+				} else if(ap == listOfApps.size()-1){
+					listOfApps.add(new Application(null, request.getAppId()));
+					listOfApps.get(listOfApps.size()-1).addRequest(request);
+					break;
 				}
+				
+			}
+			if(listOfApps.size() == 0){
+				listOfApps.add(new Application(null, request.getAppId()));
+				listOfApps.get(0).addRequest(request);
 			}
 		}
-		for(int app : list){
-			application = new Application();
-			application.setAppId(app);
-			apps.add(application);
-		}
-		for(Request request : queue){
-			for(Application m : apps){
-				if(request.getAppId() == m.getAppId()){
-					m.addRequest(request);
-				}
+		int count = 0;
+		for(Application appp : listOfApps){
+			for(Request r : appp.getListRequest()){
+				count++;
 			}
 		}
-		return apps;
+		System.out.println("number of requests getAllApps() " + count);
+		return listOfApps;
 	}
 	
-	public Application getApplication(LinkedList<Request> queue, int id){
-		Application app = new Application();
-		app.setAppId(id);
-		for(Request request : queue){
-			if(request.getAppId() == id)
-				app.addRequest(request);
+	
+	public Buffer getMinStallTimeBuffer(){
+		Buffer buff = null;
+		long min = 999999999;
+		long sum = 0;
+		ArrayList<Buffer> buffers = super.getDispInterface().getBuffers();
+		for(Buffer buffer : buffers){
+			sum = 0;
+			for(ProcessBuffer req : buffer.getProcess()){
+				sum += req.getRequest().getCompletionTime();
+			}
+			for(Request request : buffer.getQueue()){
+				sum += request.getCompletionTime();
+			}
+			if(sum < min){
+				buff = buffer;
+				min = sum;
+			}
 		}
-		app.getAppPayload();
-		app.getAppCompTime();
-		return app;
+		return buff;
 	}
-	
 	
 	
 	public int assignToBuffer(Application app){
-		for(Buffer buff : super.getDispInterface().getBuffers()){
+		ArrayList<Buffer> buffers = super.getDispInterface().getBuffers();
+		for(Buffer buff : buffers){
 			if(buff.getCurrentRessources() > app.getAppPayload() && buff.getProcess().size() < 3){
 				return buff.getId();
 			} 	
@@ -146,20 +156,6 @@ public class MinStallTime extends Policy{
 	}
 	
 	
-	public int getMinStallTimeBuffer(){
-		int id = -1;
-		long min = 999999999;
-		long sum = 0;
-		for(Buffer buffer : super.getDispInterface().getBuffers()){
-			for(Request request : buffer.getQueue()){
-				sum += request.getCompletionTime();
-			}
-			if(sum < min){
-				id = buffer.getId();
-			}
-		}
-		return id;
-	}
 
 	@Override
 	public long costFunction(ArrayList<ProcessSolver> scheduled) {

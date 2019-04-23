@@ -44,7 +44,7 @@ public class MyRequestHandler extends Thread {
 				System.out.println("---------------------------------------------  " + Thread.currentThread());
 				System.out.println("All requests received: Processing ...");
 				ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
-				System.out.println("End process : Sending ... " + response.size()  + Thread.currentThread());
+				System.out.println("End process : Sending ... " + response.size() + "   " + Thread.currentThread());
 				
 				for(ProcessSolver process : response){
 					con.sendTCP(process);

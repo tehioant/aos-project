@@ -20,6 +20,9 @@ public class Application {
 		this.completionTime = 0;
 		this.appPayload = 0;
 		this.stallTime = 0;
+		if(this.listRequest == null){
+			this.listRequest = new ArrayList<Request>();
+		}
 	}
 	
 	
@@ -34,9 +37,7 @@ public class Application {
 	 * @return the request
 	 */
 	public ArrayList<Request> getListRequest() {
-		if(listRequest == null)
-			return new ArrayList<Request>();
-		return listRequest;
+		return this.listRequest;
 	}
 
 

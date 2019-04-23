@@ -91,11 +91,10 @@ public class ApplicationFairness extends Policy{
 		while(true){
 			if(this.appList.size()/3 < super.getDispInterface().getNbMaxBuffers()){ // not enough buffers for every app
 				for(Application app : this.appList){ // the scheduling is made randomly between apps
-					randomReq = random.nextInt(ran-1);
-					// TODO   Must ensure that all Lib have the same ressources
+					randomReq = random.nextInt(ran);
 					for(Buffer buffer : super.getDispInterface().getBuffers()){
-						if(buffer.getProcess().size() < 3 && buffer.getCurrentRessources() > this.appList.get(randomReq).getAppPayload()){
-							for(Request request : this.appList.get(randomReq).getListRequest()){
+						if(buffer.getApps().size() < 3 && buffer.getCurrentRessources() > app.getAppPayload()){
+							for(Request request : app.getListRequest()){
 									scheduled.add(new ProcessSolver(request, buffer.getId()));
 							}
 							break;
@@ -106,6 +105,32 @@ public class ApplicationFairness extends Policy{
 				break;
 			} else {
 				// TODO Else when more than 3 app by buffer
+				ArrayList<Application> listmiddle = new ArrayList<Application>();
+				for(int f=0; f < super.getDispInterface().getNbMaxBuffers()*3; f++){
+					listmiddle.add(appList.get(f));
+					appList.remove(f);
+				}
+				ran = listmiddle.size();
+				for(Application app : listmiddle){ // the scheduling is made randomly between apps
+					randomReq = random.nextInt(ran);
+					for(Buffer buffer : super.getDispInterface().getBuffers()){
+						if(buffer.getApps().size() < 3 && buffer.getCurrentRessources() > app.getAppPayload()){
+							for(Request request : app.getListRequest()){
+									scheduled.add(new ProcessSolver(request, buffer.getId()));
+							}
+							break;
+						}
+					}
+					ran --;
+				}
+				//now do the rest of the app
+				for(Application appli : appList){
+					for(Request request : appli.getListRequest()){
+						scheduled.add(new ProcessSolver(request, this.getMinAppBuffer().getId()));
+					}
+				}
+				
+				
 			}
 		}
 		return scheduled;
@@ -115,44 +140,35 @@ public class ApplicationFairness extends Policy{
 	
 	
 	public ArrayList<Application> getAllApps(LinkedList<Request> queue){
-		ArrayList<Application> apps = new ArrayList<Application>();
-		List<Integer> list = new ArrayList<Integer>();
-		list.add(queue.get(0).getAppId());
-		Application application;
-		for(Request item : queue ){
-			for(int i : list){
-				if(item.getAppId() != i){
-					list.add(item.getAppId());
+		
+		ArrayList<Application> listOfApps = new ArrayList<Application>();
+		int num = 0;
+		for(Request request : queue){
+			num++;
+			for(int ap=0; ap < listOfApps.size(); ap++){
+				if(request.getAppId() == listOfApps.get(ap).getAppId()){
+					listOfApps.get(ap).addRequest(request);
+					break;
+				} else if(ap == listOfApps.size()-1){
+					listOfApps.add(new Application(null, request.getAppId()));
+					listOfApps.get(listOfApps.size()-1).addRequest(request);
+					break;
 				}
+				
+			}
+			if(listOfApps.size() == 0){
+				listOfApps.add(new Application(null, request.getAppId()));
+				listOfApps.get(0).addRequest(request);
 			}
 		}
-		for(int app : list){
-			application = new Application();
-			application.setAppId(app);
-			apps.add(application);
-		}
-		for(Request request : queue){
-			for(Application m : apps){
-				if(request.getAppId() == m.getAppId()){
-					m.addRequest(request);
-				}
+		int count = 0;
+		for(Application appp : listOfApps){
+			for(Request r : appp.getListRequest()){
+				count++;
 			}
 		}
-		return apps;
+		return listOfApps;
 	}
-	
-	public Application getApplication(LinkedList<Request> queue, int id){
-		Application app = new Application();
-		app.setAppId(id);
-		for(Request request : queue){
-			if(request.getAppId() == id)
-				app.addRequest(request);
-		}
-		app.getAppPayload();
-		app.getAppCompTime();
-		return app;
-	}
-	
 	
 	
 	
@@ -203,6 +219,18 @@ public class ApplicationFairness extends Policy{
 	}
 
 	
+
+	
+	public Buffer getMinAppBuffer(){
+		super.getDispInterface().update();
+		Buffer buffer = super.getDispInterface().getBuffers().get(0);
+		for(int index=1; index < super.getDispInterface().getBuffers().size(); index++){
+			if(buffer.getProcess().size() > (super.getDispInterface().getBuffers().get(index).getApps().size() + super.getDispInterface().getBuffers().get(index).getAppQueue().size())){
+				buffer = super.getDispInterface().getBuffers().get(index);
+			}
+		}
+		return buffer;
+	}
 	
 	
 	

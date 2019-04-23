@@ -78,7 +78,7 @@ public class Buffer {
 	/**
 	 * @return the currentRessources
 	 */
-	public long getCurrentRessources() {
+	synchronized public long getCurrentRessources() {
 		this.updateProcess();
 		this.updateApplication();
 		long ressources = this.getCapacity();

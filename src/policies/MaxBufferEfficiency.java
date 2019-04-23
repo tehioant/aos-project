@@ -65,17 +65,22 @@ public class MaxBufferEfficiency extends Policy{
 		return "MaxBufferEfficiency";
 	}
 
+	
+	
 	@Override
 	public ArrayList<ProcessSolver> getScheduled(LinkedList<Request> queue) {
 		ArrayList<ProcessSolver> scheduled = new ArrayList<ProcessSolver>();
+		ArrayList<Buffer> buffers;
 		int r = 0;
 		long diff = 999999999;
+		int sizeBuffer = super.getDispInterface().getBuffers().size();
 		long ressources;
 		Request request;
 		while(queue.size() > 0){
 			request = queue.poll();
-			for(int index=0; index <  super.getDispInterface().getBuffers().size(); index++){
-				ressources = super.getDispInterface().getBuffers().get(index).getCurrentRessources();
+			buffers = super.getDispInterface().getBuffers();
+			for(int index=0; index < sizeBuffer; index++){
+				ressources = buffers.get(index).getCurrentRessources();
 				if(ressources > request.getPayload()){
 					if( ressources - request.getPayload() < diff){
 						diff = ressources - request.getPayload();
@@ -83,12 +88,7 @@ public class MaxBufferEfficiency extends Policy{
 					}
 				}
 			}
-			while(true){
-				if(super.getDispInterface().processRequest(r, request)){
-					scheduled.add(new ProcessSolver(request, r));
-					break;
-				}
-			}
+			scheduled.add(new ProcessSolver(request, r));
 		}
 		return scheduled;
 	}
@@ -96,10 +96,6 @@ public class MaxBufferEfficiency extends Policy{
 
 	@Override
 	public long costFunction(ArrayList<ProcessSolver> scheduled) {
-		
-
-		
-		
 		return 0;
 	}
 	
