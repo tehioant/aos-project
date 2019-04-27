@@ -75,9 +75,7 @@ public class MaxBufferEfficiency extends Policy{
 		long diff = 999999999;
 		int sizeBuffer = super.getDispInterface().getBuffers().size();
 		long ressources;
-		Request request;
-		while(queue.size() > 0){
-			request = queue.poll();
+		for(Request request : queue){
 			buffers = super.getDispInterface().getBuffers();
 			for(int index=0; index < sizeBuffer; index++){
 				ressources = buffers.get(index).getCurrentRessources();

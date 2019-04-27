@@ -40,23 +40,27 @@ public class MyRequestHandler extends Thread {
 	public void run() { 
  
 		while (true) { 
-			try { 
-				System.out.println("---------------------------------------------  " + Thread.currentThread());
-				System.out.println("All requests received: Processing ...");
-				ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
-				System.out.println("End process : Sending ... " + response.size() + "   " + Thread.currentThread());
-				
-				for(ProcessSolver process : response){
-					con.sendTCP(process);
-				}
-				System.out.println("Response scheduler sent... " + Thread.currentThread()); 
-				System.out.println("---------------------------------------------");
-            	break;
-
-			} catch (NullPointerException e) { 
-				e.printStackTrace(); 
-				continue;
-			} 
+			synchronized (con) {
+				try { 
+					//System.out.println("---------------------------------------------  " + Thread.currentThread());
+					//System.out.println("All requests received: Processing ...");
+					//System.out.println(queue.size());
+					ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
+					//System.out.println("End process : Sending ... " + response.size() + "   " + Thread.currentThread());
+					
+					for(ProcessSolver process : response){
+						con.sendTCP(process);
+						//try { Thread.sleep(2); } catch (InterruptedException e) { e.printStackTrace(); }
+					}
+					//System.out.println("Response scheduler sent... " + Thread.currentThread()); 
+					//System.out.println("---------------------------------------------");
+	            	break;
+	
+				} catch (NullPointerException e) { 
+					e.printStackTrace(); 
+					continue;
+				} 
+			}
 		} 
 	} 
 	

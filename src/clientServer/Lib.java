@@ -17,6 +17,7 @@ import com.esotericsoftware.kryonet.FrameworkMessage;
 import requests.RR;
 import requests.Request;
 import solver.ProcessSolver;
+import utilitaire.Chrono;
 
 public class Lib extends Listener {
 
@@ -24,13 +25,14 @@ public class Lib extends Listener {
 	static String ip = "localhost";
 	static int tcpPort = 33278;
 	static int timeout = 500000000; //5000 msec wait time before failing
-	static int totalRequest = 1000;
+	static int totalRequest = 100000;
 	static int tot;
+	static Chrono chrono = new Chrono();
 	
 	static boolean responseReceived = false;
 	
 	public static void main(String args[]) throws Exception{
-		client = new Client(16384, 16384);
+		client = new Client(160384, 160384);
 		tot = 0;
 		
 		client.getKryo().register(RR.class);
@@ -50,12 +52,15 @@ public class Lib extends Listener {
 		
 		client.connect(timeout,ip,tcpPort);
 		
-		
-		System.out.println("Lib is waiting for response");
-		
 		while(!responseReceived) {
 			Thread.sleep(100);
 		}
+		
+		
+		System.out.println("Lib is waiting for response");
+		
+		
+		
 		//System.out.println("Disconnecting");
 		//System.exit(0);
 	}
@@ -64,10 +69,12 @@ public class Lib extends Listener {
 		
 		System.out.println("Connected to Server");
 		
+		
 		ArrayList<Application> listApps = new ArrayList<Application>();
 		
+		/**
 		for(int num=1; num <= 20; num++){
-			listApps.add(new Application(num));
+			listApps.add(new Application(num, 1000));
 		}
 		
 		ArrayList<Request> list = new ArrayList<Request>();
@@ -76,16 +83,21 @@ public class Lib extends Listener {
 		}
 		Collections.shuffle(list);
 		
+		**/
+		Application application = new Application(1, totalRequest);
+		
 		// sending requests
-		for(Request request : list){
+		for(Request request : application.getList()){
 			c.sendTCP(request);
+			//try { Thread.sleep(10); } catch (InterruptedException e) { e.printStackTrace(); }
 		}
-		System.out.println("All request sent for app : => " + list.size());
+		chrono.start();
+		System.out.println("All request sent for app : => " + application.getList().size());
 	
 	}
 	
 	public void received(Connection c, Object r) {
-			System.out.println("\n--------------------");
+			//System.out.println("\n--------------------");
 			try{
 				
 				if(r instanceof ProcessSolver){
@@ -98,7 +110,10 @@ public class Lib extends Listener {
 					System.out.println("FrameworkMessage : " + r.toString());
 				}
 		
-				System.out.println("Total requests received : " + tot);
+				if(tot == totalRequest){
+					chrono.stop();
+					System.out.println("Total requests " + tot + " received in : " + chrono.getDureeMs());
+				}
 				
 			} catch (Exception e) { 
 				e.printStackTrace(); 
@@ -112,6 +127,7 @@ public class Lib extends Listener {
 	
 	public void disconnected(Connection c) {
 		System.out.println("Disconnected.");
+		client.close();
 		/**
 		try {
 			client.connect(timeout,ip,tcpPort);
@@ -120,18 +136,11 @@ public class Lib extends Listener {
 		}
 		**/
 	}
+
+	
 	
 	
 	
 }
-
-
-
-
-
-
-
-
-
 
 

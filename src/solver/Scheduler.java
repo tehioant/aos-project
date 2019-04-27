@@ -29,7 +29,7 @@ public class Scheduler {
 	
 	
 	
-	public static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
+	public synchronized static ArrayList<ProcessSolver> getResponse(LinkedList<Request> queue){
 		
 		//System.out.println("Request : "+ queue); 
 		
@@ -41,7 +41,7 @@ public class Scheduler {
 		// Schedule requests
 		policy.setDispInterface(dispInterface);
 		
-		System.out.println("Scheduler;Scheduling with : " + policy.getPolicyName()); 
+		//System.out.println("Scheduler;Scheduling with : " + policy.getPolicyName()); 
 		schedule = policy.getScheduled(queue);
 		
 
