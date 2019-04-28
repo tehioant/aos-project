@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.*;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.util.InputStreamSender;
+import com.esotericsoftware.kryonet.util.TcpIdleSender;
 
 import requests.*;
 import solver.*;
@@ -27,6 +29,7 @@ public class MyRequestHandler extends Thread {
 	LinkedList<Request> queue;
 	LinkedList<Request> queueToFactory;
 	ArrayList<ProcessSolver> listSend;
+	
 
 	// Constructor 
 	public MyRequestHandler(Connection c, Request request, LinkedList<Request> queue) { 
@@ -47,7 +50,7 @@ public class MyRequestHandler extends Thread {
 					//System.out.println(queue.size());
 					ArrayList<ProcessSolver> response = Scheduler.getResponse(queue);
 					//System.out.println("End process : Sending ... " + response.size() + "   " + Thread.currentThread());
-					
+					InputStreamSender streamSend = null;
 					for(ProcessSolver process : response){
 						con.sendTCP(process);
 						//try { Thread.sleep(2); } catch (InterruptedException e) { e.printStackTrace(); }

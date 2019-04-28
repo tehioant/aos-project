@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.kryonet.util.InputStreamSender;
 import com.esotericsoftware.minlog.Log;
 
 import clientServer.connector.MyRequestHandler;
@@ -42,7 +43,7 @@ public class Connector extends Listener {
 		cal =  Calendar.getInstance();
 		
 		System.out.println("Creating the server");
-		server = new Server(160384, 160384);
+		server = new Server(10000000,9000000);
 		
 		server.getKryo().register(RR.class);
 		server.getKryo().register(Request.class);

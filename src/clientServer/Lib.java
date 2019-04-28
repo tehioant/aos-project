@@ -25,14 +25,14 @@ public class Lib extends Listener {
 	static String ip = "localhost";
 	static int tcpPort = 33278;
 	static int timeout = 500000000; //5000 msec wait time before failing
-	static int totalRequest = 100000;
+	static int totalRequest = 1500000;
 	static int tot;
 	static Chrono chrono = new Chrono();
 	
 	static boolean responseReceived = false;
 	
 	public static void main(String args[]) throws Exception{
-		client = new Client(160384, 160384);
+		client = new Client(10000000,9000000);
 		tot = 0;
 		
 		client.getKryo().register(RR.class);
@@ -106,14 +106,15 @@ public class Lib extends Listener {
 					// for(ProcessSolver proc : response){ System.out.println("Request Lib ID  : "+ proc.getRequest().getAppId()); }
 					//System.out.println("Request App ID  : " + response.getRequest().getAppId());
 					tot ++;
+					if(tot == totalRequest){
+						chrono.stop();
+						System.out.println("Total requests " + tot + " received in : " + chrono.getDureeMs());
+					}
 				} else if(r instanceof FrameworkMessage){
 					System.out.println("FrameworkMessage : " + r.toString());
 				}
 		
-				if(tot == totalRequest){
-					chrono.stop();
-					System.out.println("Total requests " + tot + " received in : " + chrono.getDureeMs());
-				}
+				
 				
 			} catch (Exception e) { 
 				e.printStackTrace(); 
